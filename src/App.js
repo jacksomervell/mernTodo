@@ -4,6 +4,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import CreateTodo from "./components/create-todo.component";
 import EditTodo from "./components/edit-todo.component";
 import TodosList from "./components/todos-list.component";
+import WhatIf from "./components/whatif.component";
 import logo from "./logo.svg";
 class App extends Component {
   render() {
@@ -23,6 +24,9 @@ class App extends Component {
                 <li className="navbar-item">
                   <Link to="/create" className="nav-link">Create Todo</Link>
                 </li>
+                <li className="navbar-item">
+                  <Link to="/whatIf" className="nav-link">What-if Machine</Link>
+                </li>
               </ul>
             </div>
           </nav>
@@ -30,6 +34,7 @@ class App extends Component {
           <Route path="/" exact component={TodosList} />
           <Route path="/edit/:id" component={EditTodo} />
           <Route path="/create" component={CreateTodo} />
+          <Route path="/whatIf" component={WhatIf} />
         </div>
       </Router>
     );
