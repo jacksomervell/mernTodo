@@ -1,0 +1,189 @@
+ import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
+import axios from 'axios';
+
+export default class PercTable extends Component {
+
+  constructor(props) {
+        super(props);
+
+        this.handleChange = this.handleChange.bind(this);
+
+        this.state = {
+          coreData:'',
+          isLoaded: false,
+          items: '',
+          leagueId: '',
+          managersArray: [],
+          playerArray: [],
+          currentWeek: '',
+          leagueName: ''
+    }
+
+   }
+
+
+
+  handleChange(event) {
+
+    this.setState({leagueId: event.target.value,
+              });
+  }
+
+  componentDidMount() {
+const url = 'https://ffwhatif.herokuapp.com/proxy.php';
+    fetch(url+"?csurl=https://fantasy.premierleague.com/drf/bootstrap-static")
+     .then(res => res.json())
+     .then(
+      (result) => {
+      var currentWeek = result["current-event"];
+      this.setState({
+        coreData: result.elements,
+        currentWeek: currentWeek,
+        })
+      })
+  }
+
+
+
+
+  onButtonClick() {
+
+
+    let varItems = '';
+    this.tempArray = [];
+    let picks = '';
+    this.tempPlayerArray = [];
+    this.leagueName = ''
+const url = 'https://ffwhatif.herokuapp.com/proxy.php';
+
+    fetch(url+"?csurl=https://fantasy.premierleague.com/drf/leagues-classic-standings/" + this.state.leagueId)
+      .then(res => res.json())
+      .then(
+      response => {
+        varItems = response.standings.results;
+        this.leagueName = response.league.name;
+        for (var i=0; i<varItems.length; i++){
+          this.tempArray.push(varItems[i].entry)
+        }
+       },
+      ).then(
+        response => {
+
+        for(var i=0; i<this.tempArray.length; i++){
+          fetch(url+"?csurl=https://fantasy.premierleague.com/drf/entry/" + this.tempArray[i] + "/event/" + this.state.currentWeek + "/picks")
+            .then(res=> res.json())
+            .then(
+              response => {
+                picks = response.picks;
+                for (var i=0; i<picks.length; i++){
+                  this.tempPlayerArray.push(picks[i].element)
+                }
+              }
+            )
+            .then(
+            response => {
+              if(this.tempPlayerArray.length >= this.tempArray.length * 15){
+                console.log(this.tempPlayerArray);
+
+                var nameArray = [];
+                
+                for (var i=0; i<this.tempPlayerArray.length; i++){
+                  var player = (this.state.coreData.find(theplayer => theplayer.id === this.tempPlayerArray[i]))
+                  nameArray.push(player.web_name)
+                }
+
+                function foo(arr) {
+                    var a = [], b = [], prev;
+                    arr.sort();
+                    for ( var i = 0; i < arr.length; i++ ) {
+                        if ( arr[i] !== prev ) {
+                            a.push(arr[i]);
+                            b.push(1);
+                        } else {
+                            b[b.length-1]++;
+                        }
+                        prev = arr[i];
+                    }
+                    return [a, b];
+                }
+
+                var figures = foo(nameArray)
+                var totalManagers = this.tempArray.length
+
+                var percentageArray = figures[1].map(function(x) { return Math.round(((x/totalManagers)*100) * 10)/10; });
+
+                var myObj = figures[0].reduce((acc, value, i) => (acc[value] = percentageArray[i], acc), {});
+
+                var sortedTotals = Object.keys(myObj).sort((b, a) => myObj[a]-myObj[b]).reduce((_sortedObj, key) => ({..._sortedObj, [key]: myObj[key]}), {})
+
+                this.setState({
+                  playerArray: sortedTotals,
+                  leagueName:this.leagueName
+                })
+
+                }
+              }
+            )
+        }
+        
+       },
+      )
+
+      
+  }
+
+  render() {
+    const {
+    error,
+    coreData,
+      isLoaded,
+      items,
+      leagueId,
+      managersArray,
+      playerArray,
+      currentWeek,
+      leagueName} = this.state;
+    if (error) {
+      return <div>Error: {error.message}</div>;
+    } else {
+      return (
+      <div>
+      <div className='entries'>
+        <input type="text" value={this.state.leagueId} onChange={this.handleChange} />
+        <button
+            onClick={()=>{this.onButtonClick();}}
+            style={{cursor:'pointer', backgroundColor:'darkred', color:'white', border:'0px', margin:'0 auto', height:'38px'}}
+            className='whatifButton'
+          > Calculate</button>
+      </div>
+
+   
+
+      <h2>League: {leagueName} </h2>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Player</th>
+            <th>Percentage Owned</th>
+          </tr>
+
+        </thead>
+       <tbody>
+        {Object.keys(playerArray).map(function(key) {
+            return <tr className='playerRow'>
+                      <td className='playerName'> {key}</td> 
+                      <td className='playerPerc'>{playerArray[key]}</td>
+                    </tr>
+        })}
+        </tbody>
+      </table>
+    
+
+      </div>
+      );
+    }
+  }
+
+}
