@@ -6,17 +6,18 @@ import EditTodo from "./components/edit-todo.component";
 import TodosList from "./components/todos-list.component";
 import WhatIf from "./components/whatif.component";
 import PercTable from "./components/percentages.component";
-import logo from "./logo.svg";
+
 class App extends Component {
   render() {
     return (
       <Router>
         <div className="container">
-          <nav className="navbar navbar-expand-lg navbar-light bg-light">
+          <nav className="navbar navbar-expand-lg navbar-dark bg-primary">
+
             <a className="navbar-brand" href="https://codingthesmartway.com" target="_blank">
-              <img src={logo} width="30" height="30" alt="CodingTheSmartWay.com" />
+              
             </a>
-            <Link to="/" className="navbar-brand">MERN-Stack Todo App</Link>
+            <Link to="/" className="navbar-brand">FPL Tools</Link>
             <div className="collpase navbar-collapse">
               <ul className="navbar-nav mr-auto">
                 <li className="navbar-item">
@@ -29,7 +30,7 @@ class App extends Component {
                   <Link to="/whatIf" className="nav-link">What-if Machine</Link>
                 </li>
                 <li className="navbar-item">
-                  <Link to="/percentages" className="nav-link">Player Percantages</Link>
+                  <Link to="/percentages" className="nav-link">Player Percentages</Link>
                 </li>
               </ul>
             </div>

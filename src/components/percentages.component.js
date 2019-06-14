@@ -149,20 +149,21 @@ const url = 'https://ffwhatif.herokuapp.com/proxy.php';
     } else {
       return (
       <div>
-      <div className='entries'>
+      <div className="input-group mb-3 entries">
         <input type="text" value={this.state.leagueId} onChange={this.handleChange} />
-        <button
-            onClick={()=>{this.onButtonClick();}}
-            style={{cursor:'pointer', backgroundColor:'darkred', color:'white', border:'0px', margin:'0 auto', height:'38px'}}
-            className='whatifButton'
-          > Calculate</button>
+        <div className="input-group-append">
+          <button type="button"
+              onClick={()=>{this.onButtonClick();}}
+              style={{cursor:'pointer'}}
+              className='whatifButton btn btn-outline-secondary'
+            > Calculate</button>
+        </div>
       </div>
-
    
 
       <h2>League: {leagueName} </h2>
 
-      <table>
+      <table className="table">
         <thead>
           <tr>
             <th>Player</th>

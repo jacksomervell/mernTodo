@@ -203,13 +203,16 @@ export default class WhatIf extends Component {
     } else {
       return (
       <div className={"containWhatif"}>
-      <div>
+      <div className="input-group mb-3">
       <input type="text" className={"mainInput"} value={this.state.teamId} onChange={this.handleChange} />
-      <button
-          onClick={()=>{this.onButtonClick();}}
-          style={{cursor:'pointer', backgroundColor:'darkred', color:'white', border:'0px', margin:'0 auto', height:'38px'}}
-         className={'whatifButton'}
-        > Calculate</button>
+        <div className="input-group-append">
+          <button type="button"
+            onClick={()=>{this.onButtonClick();}}
+            style={{cursor:'pointer'}}
+           className={'whatifButton btn btn-outline-secondary'}
+            > Calculate
+          </button>
+        </div>
       </div>
 
       {teamName.length > 0 &&
