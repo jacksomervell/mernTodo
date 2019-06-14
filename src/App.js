@@ -13,11 +13,7 @@ class App extends Component {
       <Router>
         <div className="container">
           <nav className="navbar navbar-expand-lg navbar-dark bg-primary">
-
-            <a className="navbar-brand" href="https://codingthesmartway.com" target="_blank">
-              
-            </a>
-            <Link to="/" className="navbar-brand">FPL Tools</Link>
+            <Link to="/" className="navbar-brand"><h1>FPL Tools</h1></Link>
             <div className="collpase navbar-collapse">
               <ul className="navbar-nav mr-auto">
                 <li className="navbar-item">

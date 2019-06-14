@@ -160,9 +160,12 @@ const url = 'https://ffwhatif.herokuapp.com/proxy.php';
         </div>
       </div>
    
-
+  {leagueName.length > 0 &&
       <h2>League: {leagueName} </h2>
+    }
 
+
+ {leagueName.length > 0 &&
       <table className="table">
         <thead>
           <tr>
@@ -171,6 +174,7 @@ const url = 'https://ffwhatif.herokuapp.com/proxy.php';
           </tr>
 
         </thead>
+
        <tbody>
         {Object.keys(playerArray).map(function(key) {
             return <tr className='playerRow'>
@@ -180,9 +184,11 @@ const url = 'https://ffwhatif.herokuapp.com/proxy.php';
         })}
         </tbody>
       </table>
+}
     
 
       </div>
+
       );
     }
   }
