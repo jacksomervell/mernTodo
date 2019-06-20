@@ -3,10 +3,10 @@ import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import CreateTodo from "./components/create-todo.component";
 import EditTodo from "./components/edit-todo.component";
-import TodosList from "./components/todos-list.component";
 import WhatIf from "./components/whatif.component";
 import PercTable from "./components/percentages.component";
 import ChipChecker from "./components/chip-checker.component";
+import Home from "./components/home.component";
 
 class App extends Component {
   render() {
@@ -18,10 +18,7 @@ class App extends Component {
             <div className="collpase navbar-collapse">
               <ul className="navbar-nav mr-auto">
                 <li className="navbar-item">
-                  <Link to="/" className="nav-link">Todos</Link>
-                </li>
-                <li className="navbar-item">
-                  <Link to="/create" className="nav-link">Create Todo</Link>
+                  <Link to="/" className="nav-link">Home</Link>
                 </li>
                 <li className="navbar-item">
                   <Link to="/whatIf" className="nav-link">What-if Machine</Link>
@@ -36,9 +33,7 @@ class App extends Component {
             </div>
           </nav>
           <br/>
-          <Route path="/" exact component={TodosList} />
-          <Route path="/edit/:id" component={EditTodo} />
-          <Route path="/create" component={CreateTodo} />
+          <Route path="/" exact component={Home} />
           <Route path="/whatIf" component={WhatIf} />
           <Route path="/percentages" component={PercTable} />
           <Route path="/chip-checker" component={ChipChecker} />
