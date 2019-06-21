@@ -20,10 +20,21 @@ export default class ToolsList extends Component {
 
   componentDidMount() {
     const setTools = [{
-        title: 'Hi',
-        description: 'test desc',
-        url: 'www.test'
-        }]
+        title: 'What-if Machine',
+        description: 'A cruel tool that calculates how many points your team would have if you’d never made a transfer, captaincy change or change of any kind at all since Gameweek 1. Approach with caution!',
+        url: '/whatif'
+        },
+        {
+        title: 'Mini-League Player Ownership',
+        description: 'See which players are most and least-owned in your mini-league.',
+        url: '/percentages'
+        },
+        {
+        title: 'Chip Checker',
+        description: 'See who has used which chips in your mini-league, and how you compare.',
+        url: '/chip-checker'
+        },
+        ]
 
     this.setState({tools : setTools})
   }

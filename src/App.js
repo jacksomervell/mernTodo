@@ -27,7 +27,7 @@ class App extends Component {
                   <Link to="/percentages" className="nav-link">Player Percentages</Link>
                 </li>
                 <li className="navbar-item">
-                  <Link to="/chip-checker" className="nav-link">Chip checker</Link>
+                  <Link to="/chip-checker" className="nav-link">Chip Checker</Link>
                 </li>
               </ul>
             </div>
