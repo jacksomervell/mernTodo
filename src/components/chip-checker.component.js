@@ -56,6 +56,16 @@ const url = 'https://ffwhatif.herokuapp.com/proxy.php';
       })
   }
 
+sort_by_key(array, key)
+{
+  console.log(array);
+ return array.sort(function(a, b)
+ {
+  var x = a[key]; var y = b[key];
+  return ((x < y) ? 1 : ((x > y) ? -1 : 0));
+ });
+}
+
 
 
 
@@ -70,13 +80,13 @@ const url = 'https://ffwhatif.herokuapp.com/proxy.php';
     let teamId = '';
     let name = '';
     let teamName = '';
+    let points = '';
 const url = 'https://ffwhatif.herokuapp.com/proxy.php';
 
     fetch(url+"?csurl=https://fantasy.premierleague.com/drf/leagues-classic-standings/" + this.state.leagueId)
       .then(res => res.json())
       .then(
       response => {
-        console.log(response);
         varItems = response.standings.results;
         this.leagueName = response.league.name;
         for (var i=0; i<varItems.length; i++){ this.tempArray.push(varItems[i].entry) } }, ).then( response => {
@@ -88,7 +98,8 @@ const url = 'https://ffwhatif.herokuapp.com/proxy.php';
                 teamId = response.entry.id;
                 name = response.entry.player_first_name + ' ' + response.entry.player_last_name;
                 teamName = response.entry.name;
-                this.playerAndChipArray.push({'id':teamId, 'teamName': teamName, 'name':name, 'chips':chips}) 
+                points = response.entry.summary_overall_points
+                this.playerAndChipArray.push({'id':teamId, 'teamName': teamName, 'name':name, 'points':points, 'chips':chips}) 
               }
             ).then(
               response => {
@@ -105,7 +116,7 @@ const url = 'https://ffwhatif.herokuapp.com/proxy.php';
                   }
 
                    this.setState({
-                    finalChips: this.playerAndChipArray,
+                    finalChips: this.sort_by_key(this.playerAndChipArray, 'points'),
                     leagueName: this.leagueName
                   })
               }              
@@ -147,10 +158,12 @@ const url = 'https://ffwhatif.herokuapp.com/proxy.php';
                 </div>
               </div>
             </div>
-               
-            <h2>League: {leagueName} </h2>
+            {leagueName.length > 0 &&   
+              <h2>League: {leagueName} </h2>
+            }
 
-            <table>
+            {leagueName.length > 0 &&   
+            <table className='table table-hover table-dark table-striped'>
             <thead>
                       
             <tr>
@@ -158,6 +171,8 @@ const url = 'https://ffwhatif.herokuapp.com/proxy.php';
             <th>Player</th>
           
             <th>Team</th>
+
+            <th>Points</th>
 
             <th>Wildcard 1</th>
          
@@ -181,7 +196,9 @@ const url = 'https://ffwhatif.herokuapp.com/proxy.php';
                         
             <td className='playerName'> {finalChips[key].name}</td>
        
-            <td className='chipCheck '>{finalChips[key].teamName}</td>
+            <td className='chipCheck'>{finalChips[key].teamName}</td>
+
+            <td className='points'>{finalChips[key].points}</td>
        
             <td className={(finalChips[key].chipNumbers.indexOf(1) != -1) ? "usedChip" : "notUsed"}>{(finalChips[key].chipNumbers.indexOf(1) != -1) ? 'Used' : 'X'}</td>
            
@@ -200,6 +217,7 @@ const url = 'https://ffwhatif.herokuapp.com/proxy.php';
                     </tbody>
      
                   </table>
+                }
          
 
                   </div>
