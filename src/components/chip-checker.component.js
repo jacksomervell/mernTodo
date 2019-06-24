@@ -76,6 +76,7 @@ const url = 'https://ffwhatif.herokuapp.com/proxy.php';
       .then(res => res.json())
       .then(
       response => {
+        console.log(response);
         varItems = response.standings.results;
         this.leagueName = response.league.name;
         for (var i=0; i<varItems.length; i++){ this.tempArray.push(varItems[i].entry) } }, ).then( response => {
@@ -103,10 +104,9 @@ const url = 'https://ffwhatif.herokuapp.com/proxy.php';
                       this.playerAndChipArray[i].chipNumbers = thisGuysChips;
                   }
 
-                  console.log(this.playerAndChipArray);
-
                    this.setState({
-                    finalChips: this.playerAndChipArray
+                    finalChips: this.playerAndChipArray,
+                    leagueName: this.leagueName
                   })
               }              
             }
@@ -135,12 +135,18 @@ const url = 'https://ffwhatif.herokuapp.com/proxy.php';
                   return (
             <div>
             <div className='entries'>
-                    <input type="text" value={this.state.leagueId} onChange={this.handleChange} />
-                    <button onClick={()=>{this.onButtonClick();}}
-                        style={{cursor:'pointer', backgroundColor:'darkred', color:'white', border:'0px', margin:'0 auto', height:'38px'}}
-                        className='whatifButton'
-                      > Calculate</button>
-                  </div>
+              <div className="input-group mb-3">
+              <input type="text" className={"mainInput"} value={this.state.leagueId} onChange={this.handleChange} />
+              <div className="input-group-append">
+                <button type="button"
+                onClick={()=>{this.onButtonClick();}}
+                style={{cursor:'pointer'}}
+                className={'whatifButton btn btn-outline-secondary'}
+                > Calculate
+                </button>
+                </div>
+              </div>
+            </div>
                
             <h2>League: {leagueName} </h2>
 
