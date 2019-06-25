@@ -197,7 +197,7 @@ export default class WhatIf extends Component {
   }
 
   render() {
-    const { error, isLoaded, items, coreData, player, score, playerArray, outfieldScore, teamName, currentWeek, subScore, highestScorer, highestScore, captain, captainScore, pointsComingOn, vicecaptScore} = this.state;
+    const { error, isLoaded, items, coreData, player, score, playerArray, outfieldScore, teamId, teamName, currentWeek, subScore, highestScorer, highestScore, captain, captainScore, pointsComingOn, vicecaptScore} = this.state;
     if (error) {
       return <div>Error: {error.message}</div>;
     } else {
@@ -210,6 +210,7 @@ export default class WhatIf extends Component {
             onClick={()=>{this.onButtonClick();}}
             style={{cursor:'pointer'}}
            className={'whatifButton btn btn-outline-secondary'}
+           disabled={!teamId}
             > Calculate
           </button>
         </div>

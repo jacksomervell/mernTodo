@@ -14,7 +14,7 @@ export default class ChipChecker extends Component {
 
     this.state =  { 
       coreData: '',
-      isLoaded: false,
+      isLoading: false,
       items: '',
       leagueId: '',
       managersArray: [],
@@ -82,6 +82,9 @@ sort_by_key(array, key)
     let teamName = '';
     let points = '';
 const url = 'https://ffwhatif.herokuapp.com/proxy.php';
+      this.setState({
+        isLoading: true
+      })
 
     fetch(url+"?csurl=https://fantasy.premierleague.com/drf/leagues-classic-standings/" + this.state.leagueId)
       .then(res => res.json())
@@ -117,7 +120,8 @@ const url = 'https://ffwhatif.herokuapp.com/proxy.php';
 
                    this.setState({
                     finalChips: this.sort_by_key(this.playerAndChipArray, 'points'),
-                    leagueName: this.leagueName
+                    leagueName: this.leagueName,
+                    isLoading: false
                   })
               }              
             }
@@ -135,7 +139,7 @@ const url = 'https://ffwhatif.herokuapp.com/proxy.php';
     const {
     error,
     coreData,
-      isLoaded,
+      isLoading,
       chips,
       finalChips,
       leagueId,
@@ -153,6 +157,7 @@ const url = 'https://ffwhatif.herokuapp.com/proxy.php';
                 onClick={()=>{this.onButtonClick();}}
                 style={{cursor:'pointer'}}
                 className={'whatifButton btn btn-outline-secondary'}
+                disabled={!leagueId}
                 > Calculate
                 </button>
                 </div>
@@ -160,6 +165,10 @@ const url = 'https://ffwhatif.herokuapp.com/proxy.php';
             </div>
             {leagueName.length > 0 &&   
               <h2>League: {leagueName} </h2>
+            }
+
+            {isLoading === true &&
+              <div>Preparing data...</div>
             }
 
             {leagueName.length > 0 &&   

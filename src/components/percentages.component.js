@@ -156,6 +156,7 @@ const url = 'https://ffwhatif.herokuapp.com/proxy.php';
               onClick={()=>{this.onButtonClick();}}
               style={{cursor:'pointer'}}
               className='whatifButton btn btn-outline-secondary'
+              disabled={!leagueId}
             > Calculate</button>
         </div>
       </div>
