@@ -6,6 +6,7 @@ import EditTodo from "./components/edit-todo.component";
 import WhatIf from "./components/whatif.component";
 import PercTable from "./components/percentages.component";
 import ChipChecker from "./components/chip-checker.component";
+import YouRival from "./components/youvsrival.component";
 import Home from "./components/home.component";
 
 class App extends Component {
@@ -29,6 +30,9 @@ class App extends Component {
                 <li className="navbar-item">
                   <Link to="/chip-checker" className="nav-link">Chip Checker</Link>
                 </li>
+                <li className="navbar-item">
+                  <Link to="/you-vs-rival" className="nav-link">You vs Rival</Link>
+                </li>
               </ul>
             </div>
           </nav>
@@ -37,6 +41,7 @@ class App extends Component {
           <Route path="/whatIf" component={WhatIf} />
           <Route path="/percentages" component={PercTable} />
           <Route path="/chip-checker" component={ChipChecker} />
+          <Route path="/you-vs-rival" component={YouRival} />
         </div>
       </Router>
     );
