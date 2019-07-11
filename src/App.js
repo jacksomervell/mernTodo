@@ -15,8 +15,9 @@ class App extends Component {
     return (
       <Router>
         <Container>
-          <Navbar expand="lg" variant="dark" className="fplNav">
+          <Navbar expand="sm" variant="dark" className="fplNav">
             <Link to="/" className="navbar-brand"><h1>FPL Tools</h1></Link>
+            <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse>
               <Nav className="mr-auto">
                 <NavDropdown title="Tools" id="basic-nav-dropdown">
