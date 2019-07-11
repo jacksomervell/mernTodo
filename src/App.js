@@ -1,6 +1,8 @@
+import "bootstrap/dist/css/bootstrap.min.css";
+import './index.css';
+import './index.scss';
 import React, { Component } from "react";
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
-import "bootstrap/dist/css/bootstrap.min.css";
 import WhatIf from "./components/whatif.component";
 import PercTable from "./components/percentages.component";
 import ChipChecker from "./components/chip-checker.component";
@@ -13,7 +15,7 @@ class App extends Component {
     return (
       <Router>
         <Container>
-          <Navbar expand="lg" bg="primary" variant="dark">
+          <Navbar expand="lg" variant="dark" className="fplNav">
             <Link to="/" className="navbar-brand"><h1>FPL Tools</h1></Link>
             <Navbar.Collapse>
               <Nav className="mr-auto">

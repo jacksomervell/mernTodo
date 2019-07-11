@@ -5,6 +5,7 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background: #379683
 }
 
 code {
@@ -19,4 +20,48 @@ code {
 
 h2, p, a {
   font-family: 'Noto Sans KR', sans-serif;
+  text-decoration: none;
+}
+
+.fplNav {
+  background: #05386B;
+}
+
+.navbar-dark .navbar-nav .nav-link {
+  color: white;
+}
+
+.toolLink {
+  color:#05386B;
+  width:100%;
+  margin: 0px;
+  margin-top: 18px;
+  transition: all 0.5s;
+    -moz-transition: all 0.2s linear; /* Firefox 4 */
+    -webkit-transition: all 0.2s linear; /* Safari and Chrome */
+    -o-transition: all 0.2s linear; /* Opera */
+    -ms-transition: all 0.5s linear; /* Explorer 10 */
+}
+
+.toolLink:hover {
+  color:white;
+  box-shadow: inset 100px 50px 0 0 #379683;
+}
+
+.toolLink:link {
+  text-decoration:none;
+}
+
+.container {
+  background: #5cdb95;
+  padding:0;
+  height: 100vh;
+}
+
+.navbar {
+  width:100%;
+}
+
+html, body {
+    height:100vh;
 }

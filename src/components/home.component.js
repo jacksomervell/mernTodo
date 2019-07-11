@@ -1,13 +1,15 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import { Row, Col} from 'react-bootstrap';
 import axios from 'axios';
 
 const Tool = props => (
-  <div>
+  <Row as={Link} to={props.tool.url} className='toolLink' >
+   <Col>
     <h2>{props.tool.title}</h2>
     <p>{props.tool.description}</p>
-    <Link to={props.tool.url}>Check it out</Link>
-  </div>
+  </Col>
+  </Row>
 )
 
 
@@ -41,7 +43,7 @@ export default class ToolsList extends Component {
 
   toolsList() {
         return this.state.tools.map(function(currentTool, i){
-            return <Tool tool={currentTool} key={i} />;
+          return <Tool tool={currentTool} key={i} />;
         })
     }
 
