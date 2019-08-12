@@ -40,14 +40,22 @@ export default class WhatIf extends Component {
 
   componentDidMount() {
     const url = 'https://ffwhatif.herokuapp.com/proxy.php';
-    fetch(url+"?csurl=https://fantasy.premierleague.com/drf/bootstrap-static")
+    fetch(url+"?csurl=https://fantasy.premierleague.com/api/bootstrap-static/")
      .then(res => res.json())
      .then(
       (result) => {
-      var currentWeek = result["current-event"];
+        let currentWeek = 1;
+        let events = result.events;
+        events.forEach(function(element) {
+          if(element.finished === true){
+            currentWeek = element.id;
+          }
+        });
+console.log(currentWeek);
+
       this.setState({
         coreData: result.elements,
-        currentWeek: currentWeek,
+        currentWeek: 1,
         })
       })
   }
@@ -66,7 +74,7 @@ export default class WhatIf extends Component {
 
     const url = 'https://ffwhatif.herokuapp.com/proxy.php';
 
-    fetch(url+"?csurl=https://fantasy.premierleague.com/drf/entry/" + this.state.teamId + "/event/1/picks")
+    fetch(url+"?csurl=https://fantasy.premierleague.com/api/entry/" + this.state.teamId + "/event/1/picks/")
       .then(res => res.json())
       .then(
       (result) => {
@@ -109,6 +117,8 @@ export default class WhatIf extends Component {
 
 //get the total mmax mins played for the seaosn so far
           var allMins = this.state.currentWeek * 90;
+
+          console.log(this.state);
 
           for (var i=0; i<11; i++){
             outScore = outScore + this.tempArray[i].total_points
@@ -182,11 +192,11 @@ export default class WhatIf extends Component {
       )
       .then(
         (result) => {
-         fetch(url + "?csurl=https://fantasy.premierleague.com/drf/entry/" + this.state.teamId)
+         fetch(url + "?csurl=https://fantasy.premierleague.com/api/entry/" + this.state.teamId +"/")
          .then(res => res.json())
           .then(
             (result) => {
-                var teamName = result.entry.name;
+                var teamName = result.player_first_name;
                 this.setState({
                 teamName: teamName,
                  });
@@ -225,7 +235,7 @@ export default class WhatIf extends Component {
           <div className={"playerbar"}>
 
           {playerArray.map(item => {
-            
+
           if(item.element_type == 1 && playerArray.indexOf(item) < 11){
              return <div key={item.id} className={"starter"}>
                 <span className="pointSpan">{item.web_name} { item.is_cap == true ? '(c)' : item.is_vice == true ? '(vc)' : ''}</span>
@@ -251,7 +261,7 @@ export default class WhatIf extends Component {
           })}
 
           </div>
-          
+
           <div className={"playerbar"}>
 
 
@@ -296,9 +306,9 @@ export default class WhatIf extends Component {
             }
 
           })}
-            
+
           </div>
-            
+
       </div>
 
       {teamName.length > 0 &&
@@ -310,7 +320,7 @@ export default class WhatIf extends Component {
       <div>
        <p>If <strong>{teamName}</strong> had made no changes since GW1, their score would be <strong>{outfieldScore}.</strong> </p>
        <p>...with <strong>{pointsComingOn}</strong> points coming from the bench via automatic subs, and <strong>{vicecaptScore}</strong> extra points coming from their Vice Captain when their Captain didn't play.</p>
-       <p>They captained {captain} who's scored {captainScore * 0.5} points so far. They should have captained {highestScorer}, who has {highestScore} points so far.</p> 
+       <p>They captained {captain} who's scored {captainScore * 0.5} points so far. They should have captained {highestScorer}, who has {highestScore} points so far.</p>
        {captain == highestScorer &&
        <p>...wait... that's the same player! Good job picking your captain! </p>
        }
