@@ -31,7 +31,7 @@ function authenticate() {
         },
         data: JSON.stringify({
             'login': 'jacksomervell@gmail.com',
-            'password': 'littlederek12',
+            'password': '',
             'app': 'plfpl-web',
              'redirect_uri': 'https://fantasy.premierleague.com/a/login'
         })
