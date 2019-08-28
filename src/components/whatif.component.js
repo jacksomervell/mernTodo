@@ -51,11 +51,11 @@ export default class WhatIf extends Component {
             currentWeek = element.id;
           }
         });
-console.log(currentWeek);
+
 
       this.setState({
         coreData: result.elements,
-        currentWeek: 1,
+        currentWeek: currentWeek,
         })
       })
   }
@@ -170,6 +170,8 @@ console.log(currentWeek);
 
 
           averageSubScore = (subScore/4)/this.state.currentWeek;
+
+          console.log(this.state.currentWeek);
 
           scoreToAddFromSubs = totalMatchesMissed * averageSubScore;
 

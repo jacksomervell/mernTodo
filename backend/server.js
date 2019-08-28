@@ -5,27 +5,48 @@ const cors = require('cors');
 const mongoose = require('mongoose');
 const todoRoutes = express.Router();
 const PORT = 4000;
+const axios = require('axios')
 
 let Todo = require('./todo.model');
 
 app.use(cors());
 app.use(bodyParser.json());
 
-mongoose.connect('mongodb://127.0.0.1:27017/todos', { useNewUrlParser: true });
-const connection = mongoose.connection;
+// mongoose.connect('mongodb://127.0.0.1:27017/todos', { useNewUrlParser: true });
+// const connection = mongoose.connection;
 
-connection.once('open', function() {
-    console.log("MongoDB database connection established successfully");
-})
+// connection.once('open', function() {
+//     console.log("MongoDB database connection established successfully");
+// })
 
-todoRoutes.route('/').get(function(req, res) {
-    Todo.find(function(err, todos) {
-        if (err) {
-            console.log(err);
-        } else {
-            res.json(todos);
-        }
+function authenticate() {
+    console.log('hi!');
+    return axios.get('https://users.premierleague.com/accounts/login', {
+        method: 'POST',
+        credentials: 'same-origin',
+        withCredentials: true,
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        data: JSON.stringify({
+            'login': 'jacksomervell@gmail.com',
+            'password': 'littlederek12',
+            'app': 'plfpl-web',
+             'redirect_uri': 'https://fantasy.premierleague.com/a/login'
+        })
+    }).then(function (res) {
+        return res;
     });
+};
+
+
+
+
+todoRoutes.route('/fish').get(function(req, res) {
+    authenticate().then(data => {
+        console.log(data);
+    })
 });
 
 todoRoutes.route('/:id').get(function(req, res) {
@@ -55,6 +76,7 @@ todoRoutes.route('/update/:id').post(function(req, res) {
 });
 
 todoRoutes.route('/add').post(function(req, res) {
+    console.log('hi');
     let todo = new Todo(req.body);
     todo.save()
         .then(todo => {
@@ -64,6 +86,8 @@ todoRoutes.route('/add').post(function(req, res) {
             res.status(400).send('adding new todo failed');
         });
 });
+
+
 
 app.use('/todos', todoRoutes);
 

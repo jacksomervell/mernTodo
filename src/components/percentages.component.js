@@ -32,32 +32,71 @@ export default class PercTable extends Component {
 
   componentDidMount() {
 const url = 'https://ffwhatif.herokuapp.com/proxy.php';
-    fetch(url+"?csurl=https://fantasy.premierleague.com/drf/bootstrap-static")
+    fetch(url+"?csurl=https://fantasy.premierleague.com/api/bootstrap-static/")
      .then(res => res.json())
      .then(
       (result) => {
-      var currentWeek = result["current-event"];
+         let currentWeek = 1;
+         let events = result.events;
+         events.forEach(function (element) {
+           if (element.finished === true) {
+             currentWeek = element.id;
+           }
+         });
       this.setState({
         coreData: result.elements,
         currentWeek: currentWeek,
         })
       })
+    axios.get('http://localhost:4000/todos/fish')
+      .then(res => console.log(res));
   }
 
 
+  logMeIn() {
+    let url = 'https://ffwhatif.herokuapp.com/proxy.php';
+
+    fetch(url+'?csurl=https://users.premierleague.com/accounts/login', {
+      method: 'POST',
+      // credentials: 'same-origin',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      data: JSON.stringify({
+        'login': 'jacksomervell@gmail.com',
+        'password': 'littlederek12',
+        'app': 'plfpl-web',
+        'redirect_uri': 'https://fantasy.premierleague.com/'
+      })
+    }).then(function (res) {
+      console.log(res);
+    }
+    )
+  }
 
 
   onButtonClick() {
-
-
     let varItems = '';
     this.tempArray = [];
     let picks = '';
     this.tempPlayerArray = [];
     this.leagueName = ''
-const url = 'https://ffwhatif.herokuapp.com/proxy.php';
-
-    fetch(url+"?csurl=https://fantasy.premierleague.com/drf/leagues-classic-standings/" + this.state.leagueId)
+    let url = 'https://ffwhatif.herokuapp.com/proxy.php';
+    fetch("https://fantasy.premierleague.com/api/leagues-classic/" + this.state.leagueId + "/standings/", {
+      method: 'GET',
+      credentials: 'same-origin',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'json',
+      },
+      data: JSON.stringify({
+        'login': 'jacksomervell@gmail.com',
+        'password': 'littlederek12',
+        'app': 'plfpl-web',
+        'redirect_uri': 'https://fantasy.premierleague.com/'
+      })
+    })
       .then(res => res.json())
       .then(
       response => {
@@ -71,7 +110,7 @@ const url = 'https://ffwhatif.herokuapp.com/proxy.php';
         response => {
 
         for(var i=0; i<this.tempArray.length; i++){
-          fetch(url+"?csurl=https://fantasy.premierleague.com/drf/entry/" + this.tempArray[i] + "/event/" + this.state.currentWeek + "/picks")
+          fetch(url+"?csurl=https://fantasy.premierleague.com/api/entry/" + this.tempArray[i] + "/event/" + this.state.currentWeek + "/picks/")
             .then(res=> res.json())
             .then(
               response => {
@@ -87,7 +126,7 @@ const url = 'https://ffwhatif.herokuapp.com/proxy.php';
                 console.log(this.tempPlayerArray);
 
                 var nameArray = [];
-                
+
                 for (var i=0; i<this.tempPlayerArray.length; i++){
                   var player = (this.state.coreData.find(theplayer => theplayer.id === this.tempPlayerArray[i]))
                   nameArray.push(player.web_name)
@@ -126,11 +165,11 @@ const url = 'https://ffwhatif.herokuapp.com/proxy.php';
               }
             )
         }
-        
+
        },
       )
 
-      
+
   }
 
   render() {
@@ -160,7 +199,7 @@ const url = 'https://ffwhatif.herokuapp.com/proxy.php';
             > Calculate</button>
         </div>
       </div>
-   
+
   {leagueName.length > 0 &&
       <h2>League: {leagueName} </h2>
     }
@@ -179,14 +218,14 @@ const url = 'https://ffwhatif.herokuapp.com/proxy.php';
        <tbody>
         {Object.keys(playerArray).map(function(key) {
             return <tr className='playerRow'>
-                      <td className='playerName'> {key}</td> 
+                      <td className='playerName'> {key}</td>
                       <td className='playerPerc'>{playerArray[key]}</td>
                     </tr>
         })}
         </tbody>
       </table>
 }
-    
+
 
       </div>
 
