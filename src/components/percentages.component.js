@@ -48,31 +48,11 @@ const url = 'https://ffwhatif.herokuapp.com/proxy.php';
         currentWeek: currentWeek,
         })
       })
-    axios.get('http://localhost:4000/todos/fish')
-      .then(res => console.log(res));
-  }
-
-
-  logMeIn() {
-    let url = 'https://ffwhatif.herokuapp.com/proxy.php';
-
-    fetch(url+'?csurl=https://users.premierleague.com/accounts/login', {
-      method: 'POST',
-      // credentials: 'same-origin',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
-      data: JSON.stringify({
-        'login': 'jacksomervell@gmail.com',
-        'password': '',
-        'app': 'plfpl-web',
-        'redirect_uri': 'https://fantasy.premierleague.com/'
-      })
-    }).then(function (res) {
-      console.log(res);
-    }
-    )
+    .then((res) => {
+      fetch('http://localhost:4000/todos/fish')
+        .then(res => res.json())
+        .then(response => { console.log(response) });
+    })
   }
 
 
@@ -83,21 +63,8 @@ const url = 'https://ffwhatif.herokuapp.com/proxy.php';
     this.tempPlayerArray = [];
     this.leagueName = ''
     let url = 'https://ffwhatif.herokuapp.com/proxy.php';
-    fetch("https://fantasy.premierleague.com/api/leagues-classic/" + this.state.leagueId + "/standings/", {
-      method: 'GET',
-      credentials: 'same-origin',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'json',
-      },
-      data: JSON.stringify({
-        'login': 'jacksomervell@gmail.com',
-        'password': 'littlederek12',
-        'app': 'plfpl-web',
-        'redirect_uri': 'https://fantasy.premierleague.com/'
-      })
-    })
-      .then(res => res.json())
+
+      fetch("https://fantasy.premierleague.com/api/leagues-classic/" + this.state.leagueId + "/standings/")
       .then(
       response => {
         varItems = response.standings.results;

@@ -6,6 +6,7 @@ const mongoose = require('mongoose');
 const todoRoutes = express.Router();
 const PORT = 4000;
 const axios = require('axios')
+var request = require('request');
 
 let Todo = require('./todo.model');
 
@@ -20,7 +21,6 @@ app.use(bodyParser.json());
 // })
 
 function authenticate() {
-    console.log('hi!');
     return axios.get('https://users.premierleague.com/accounts/login', {
         method: 'POST',
         credentials: 'same-origin',
@@ -31,7 +31,7 @@ function authenticate() {
         },
         data: JSON.stringify({
             'login': 'jacksomervell@gmail.com',
-            'password': '',
+            'password': 'Bl4ckb0ard',
             'app': 'plfpl-web',
              'redirect_uri': 'https://fantasy.premierleague.com/a/login'
         })
@@ -44,15 +44,36 @@ function authenticate() {
 
 
 todoRoutes.route('/fish').get(function(req, res) {
-    authenticate().then(data => {
-        console.log(data);
-    })
+    // authenticate()
+
+    // request("https://fantasy.premierleague.com/api/bootstrap-static/", function (error, response, body) {
+    //     if (!error && response.statusCode == 200) {
+    //         console.log(body) // Print the google web page.
+    //         res.json(body);
+    //     }
+    // })
+
+    request.post({
+        url: 'https://users.premierleague.com/accounts/login/',
+        //  credentials: 'same-origin',
+        // withCredentials: true,
+
+        data: {
+            'login': 'jacksomervell@gmail.com',
+            'password': 'Bl4ckb0ard',
+            'app': 'plfpl-web',
+            'redirect_uri': 'https://fantasy.premierleague.com'
+        }
+    }, function (error, response, body) {
+        res.json(response);
+    });
+
 });
 
 todoRoutes.route('/:id').get(function(req, res) {
     let id = req.params.id;
     Todo.findById(id, function(err, todo) {
-        res.json(todo);
+        res.json('todo');
     });
 });
 
@@ -76,7 +97,6 @@ todoRoutes.route('/update/:id').post(function(req, res) {
 });
 
 todoRoutes.route('/add').post(function(req, res) {
-    console.log('hi');
     let todo = new Todo(req.body);
     todo.save()
         .then(todo => {
