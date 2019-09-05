@@ -20,52 +20,19 @@ app.use(bodyParser.json());
 //     console.log("MongoDB database connection established successfully");
 // })
 
-function authenticate() {
-    return axios.get('https://users.premierleague.com/accounts/login', {
-        method: 'POST',
-        credentials: 'same-origin',
-        withCredentials: true,
-        headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        data: JSON.stringify({
-            'login': 'jacksomervell@gmail.com',
-            'password': 'Bl4ckb0ard',
-            'app': 'plfpl-web',
-             'redirect_uri': 'https://fantasy.premierleague.com/a/login'
-        })
-    }).then(function (res) {
-        return res;
-    });
-};
 
 
+todoRoutes.route('/fish/:leagueId').get(function(req, res) {
+    let { PythonShell } = require('python-shell')
 
+    let options = {
+        args: [req.params.leagueId]
+    }
 
-todoRoutes.route('/fish').get(function(req, res) {
-    // authenticate()
-
-    // request("https://fantasy.premierleague.com/api/bootstrap-static/", function (error, response, body) {
-    //     if (!error && response.statusCode == 200) {
-    //         console.log(body) // Print the google web page.
-    //         res.json(body);
-    //     }
-    // })
-
-    request.post({
-        url: 'https://users.premierleague.com/accounts/login/',
-        //  credentials: 'same-origin',
-        // withCredentials: true,
-
-        data: {
-            'login': 'jacksomervell@gmail.com',
-            'password': 'Bl4ckb0ard',
-            'app': 'plfpl-web',
-            'redirect_uri': 'https://fantasy.premierleague.com'
-        }
-    }, function (error, response, body) {
-        res.json(response);
+    PythonShell.run('Python/auth.py', options, function (err, results) {
+        if (err) throw err;
+        // results is an array consisting of messages collected during execution
+        res.send(results[1]);
     });
 
 });

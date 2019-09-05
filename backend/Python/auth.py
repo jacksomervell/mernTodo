@@ -8,7 +8,7 @@ leagueID = sys.argv[1]
 
 payload = {
  'password': 'Bl4ckb0ard',
- 'login': 'jacksomervell@gmail.com',
+ 'login': 'jack.somervell@curtisbanks.co.uk',
  'redirect_uri': 'https://fantasy.premierleague.com/a/login',
  'app': 'plfpl-web'
 }
