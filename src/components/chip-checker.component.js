@@ -12,7 +12,7 @@ export default class ChipChecker extends Component {
 
 
 
-    this.state =  { 
+    this.state =  {
       coreData: '',
       isLoading: false,
       items: '',
@@ -44,7 +44,7 @@ export default class ChipChecker extends Component {
 
   componentDidMount() {
 const url = 'https://ffwhatif.herokuapp.com/proxy.php';
-    fetch(url+"?csurl=https://fantasy.premierleague.com/drf/bootstrap-static")
+    fetch(url+"?csurl=https://fantasy.premierleague.com/api/bootstrap-static")
      .then(res => res.json())
      .then(
       (result) => {
@@ -86,23 +86,26 @@ const url = 'https://ffwhatif.herokuapp.com/proxy.php';
         isLoading: true
       })
 
-    fetch(url+"?csurl=https://fantasy.premierleague.com/drf/leagues-classic-standings/" + this.state.leagueId)
+    fetch("http://localhost:4000/todos/fish/" + this.state.leagueId)
       .then(res => res.json())
+      .then(res => JSON.parse(res))
       .then(
       response => {
         varItems = response.standings.results;
         this.leagueName = response.league.name;
         for (var i=0; i<varItems.length; i++){ this.tempArray.push(varItems[i].entry) } }, ).then( response => {
 
-        for(var i=0; i<this.tempArray.length; i++){ fetch(url+"?csurl=https://fantasy.premierleague.com/drf/entry/" + this.tempArray[i] + "/history") .then(res=>res.json())
+        for(var i=0; i<this.tempArray.length; i++){ fetch(url+"?csurl=https://fantasy.premierleague.com/api/entry/" + this.tempArray[i] + "/history/") .then(res=>res.json())
             .then(
               response => {
+                console.log(response); //have to call it without the history part to get the rest
+                return;
                 chips = response.chips;
                 teamId = response.entry.id;
                 name = response.entry.player_first_name + ' ' + response.entry.player_last_name;
                 teamName = response.entry.name;
                 points = response.entry.summary_overall_points
-                this.playerAndChipArray.push({'id':teamId, 'teamName': teamName, 'name':name, 'points':points, 'chips':chips}) 
+                this.playerAndChipArray.push({'id':teamId, 'teamName': teamName, 'name':name, 'points':points, 'chips':chips})
               }
             ).then(
               response => {
@@ -123,16 +126,16 @@ const url = 'https://ffwhatif.herokuapp.com/proxy.php';
                     leagueName: this.leagueName,
                     isLoading: false
                   })
-              }              
+              }
             }
 
             )
-            
+
         }
        }
       )
 
-      
+
   }
 
   render() {
@@ -163,7 +166,7 @@ const url = 'https://ffwhatif.herokuapp.com/proxy.php';
                 </div>
               </div>
             </div>
-            {leagueName.length > 0 &&   
+            {leagueName.length > 0 &&
               <h2>League: {leagueName} </h2>
             }
 
@@ -171,69 +174,69 @@ const url = 'https://ffwhatif.herokuapp.com/proxy.php';
               <div>Preparing data...</div>
             }
 
-            {leagueName.length > 0 &&   
+            {leagueName.length > 0 &&
             <table className='table table-hover table-dark table-striped'>
             <thead>
-                      
+
             <tr>
-                        
+
             <th>Player</th>
-          
+
             <th>Team</th>
 
             <th>Points</th>
 
             <th>Wildcard 1</th>
-         
+
             <th>Wildcard 2</th>
-           
+
             <th>Free Hit</th>
-    
+
             <th>Triple Captain</th>
-  
+
             <th>Bench Boost</th>
 
 
                       </tr>
-         
+
 
                     </thead>
-        
+
             <tbody>
                     {Object.keys(finalChips).map(function(key) {
                         return <tr className='playerRow'>
-                        
+
             <td className='playerName'> {finalChips[key].name}</td>
-       
+
             <td className='chipCheck'>{finalChips[key].teamName}</td>
 
             <td className='points'>{finalChips[key].points}</td>
-       
+
             <td className={(finalChips[key].chipNumbers.indexOf(1) != -1) ? "usedChip" : "notUsed"}>{(finalChips[key].chipNumbers.indexOf(1) != -1) ? 'Used' : 'X'}</td>
-           
+
             <td className={(finalChips[key].chipNumbers.indexOf(2) != -1) ? "usedChip" : "notUsed"}>{(finalChips[key].chipNumbers.indexOf(2) != -1) ? 'Used' : 'X'}</td>
-          
+
             <td className={(finalChips[key].chipNumbers.indexOf(3) != -1) ? "usedChip" : "notUsed"}>{(finalChips[key].chipNumbers.indexOf(3) != -1) ? 'Used' : 'X'}</td>
-          
+
             <td className={(finalChips[key].chipNumbers.indexOf(4) != -1) ? "usedChip" : "notUsed"}>{(finalChips[key].chipNumbers.indexOf(4) != -1) ? 'Used' : 'X'}</td>
 
             <td className={(finalChips[key].chipNumbers.indexOf(5) != -1) ? "usedChip" : "notUsed"}>{(finalChips[key].chipNumbers.indexOf(5) != -1) ? 'Used' : 'X'}</td>
-    
-                                  
+
+
                                 </tr>
 
                     })}
                     </tbody>
-     
+
                   </table>
                 }
-         
+
 
                   </div>
-     
+
       );
     }
   }
 
-  
+
   }

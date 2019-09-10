@@ -32,7 +32,7 @@ todoRoutes.route('/fish/:leagueId').get(function(req, res) {
     PythonShell.run('Python/auth.py', options, function (err, results) {
         if (err) throw err;
         // results is an array consisting of messages collected during execution
-        res.send(results[1]);
+        res.json(results[1]);
     });
 
 });

@@ -60,10 +60,10 @@ const url = 'https://ffwhatif.herokuapp.com/proxy.php';
     let url = 'https://ffwhatif.herokuapp.com/proxy.php';
 
     fetch("http://localhost:4000/todos/fish/" + this.state.leagueId)
+      .then(res => res.json())
+      .then(res => JSON.parse(res))
       .then(
       response => {
-        console.log(response);
-        return;
         varItems = response.standings.results;
         this.leagueName = response.league.name;
         for (var i=0; i<varItems.length; i++){
