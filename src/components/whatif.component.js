@@ -171,11 +171,11 @@ export default class WhatIf extends Component {
 
           averageSubScore = (subScore/4)/this.state.currentWeek;
 
-          console.log(this.state.currentWeek);
-
           scoreToAddFromSubs = totalMatchesMissed * averageSubScore;
 
-          scoreToAddFromSubs = parseFloat(scoreToAddFromSubs.toFixed());
+          scoreToAddFromSubs = Math.abs(parseFloat(scoreToAddFromSubs.toFixed()));
+          console.log(scoreToAddFromSubs);
+
 
           this.setState({
             playerArray: this.tempArray,
@@ -187,7 +187,7 @@ export default class WhatIf extends Component {
             captainScore: captScore,
             averageSubScore: averageSubScore,
             pointsComingOn: scoreToAddFromSubs,
-            vicecaptScore: vicePointsToAdd,
+            vicecaptScore: Math.abs(vicePointsToAdd),
             vicecapt: vicecapt
         })
        }
