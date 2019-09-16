@@ -23,7 +23,7 @@ export default class ChipChecker extends Component {
       leagueName: '',
       chips: '',
       chipNames: {
-        1: 'Wildcard 1',
+        1: 'wildcard',
         2: 'Wildcard 2',
         3: 'Free Hit',
         4: 'Triple Captain',
@@ -58,7 +58,6 @@ const url = 'https://ffwhatif.herokuapp.com/proxy.php';
 
 sort_by_key(array, key)
 {
-  console.log(array);
  return array.sort(function(a, b)
  {
   var x = a[key]; var y = b[key];
@@ -93,32 +92,38 @@ const url = 'https://ffwhatif.herokuapp.com/proxy.php';
       response => {
         varItems = response.standings.results;
         this.leagueName = response.league.name;
-        for (var i=0; i<varItems.length; i++){ this.tempArray.push(varItems[i].entry) } }, ).then( response => {
-
+        for (var i=0; i<varItems.length; i++){ 
+          this.tempArray.push(varItems[i].entry);
+        } 
+      }, 
+      ).then( response => {
         for(var i=0; i<this.tempArray.length; i++){ fetch(url+"?csurl=https://fantasy.premierleague.com/api/entry/" + this.tempArray[i] + "/history/") .then(res=>res.json())
             .then(
               response => {
-                console.log(response); //have to call it without the history part to get the rest
-                return;
                 chips = response.chips;
-                teamId = response.entry.id;
-                name = response.entry.player_first_name + ' ' + response.entry.player_last_name;
-                teamName = response.entry.name;
-                points = response.entry.summary_overall_points
-                this.playerAndChipArray.push({'id':teamId, 'teamName': teamName, 'name':name, 'points':points, 'chips':chips})
+                this.playerAndChipArray.push({'points':points, 'chips':chips});
+                // teamId = varItems[i].id;
+                // name = varItems[i].player_name;
+                // teamName = varItems[i].entry_name;
+                // points = varItems[i].total;
+                // this.playerAndChipArray.push({'id':teamId, 'teamName': teamName, 'name':name, 'points':points, 'chips':chips})
               }
             ).then(
               response => {
                 if(this.tempArray.length == this.playerAndChipArray.length) {
-
                   for (var i=0; i<this.playerAndChipArray.length; i++){
                       var chips = this.playerAndChipArray[i].chips;
                       var thisGuysChips = [];
                       for (var b=0; b<chips.length; b++) {
-                          var chipNumber = chips[b].chip;
+                          var chipNumber = chips[b].name;
                           thisGuysChips.push(chipNumber)
                       }
                       this.playerAndChipArray[i].chipNumbers = thisGuysChips;
+
+                      this.playerAndChipArray[i].id = varItems[i].id;
+                      this.playerAndChipArray[i].name = varItems[i].player_name;
+                      this.playerAndChipArray[i].teamName = varItems[i].entry_name;
+                      this.playerAndChipArray[i].points = varItems[i].total;
                   }
 
                    this.setState({
@@ -212,15 +217,15 @@ const url = 'https://ffwhatif.herokuapp.com/proxy.php';
 
             <td className='points'>{finalChips[key].points}</td>
 
-            <td className={(finalChips[key].chipNumbers.indexOf(1) != -1) ? "usedChip" : "notUsed"}>{(finalChips[key].chipNumbers.indexOf(1) != -1) ? 'Used' : 'X'}</td>
+            <td className={(finalChips[key].chipNumbers.indexOf('wildcard') != -1) ? "usedChip" : "notUsed"}>{(finalChips[key].chipNumbers.indexOf('wildcard') != -1) ? 'Used' : 'X'}</td>
 
-            <td className={(finalChips[key].chipNumbers.indexOf(2) != -1) ? "usedChip" : "notUsed"}>{(finalChips[key].chipNumbers.indexOf(2) != -1) ? 'Used' : 'X'}</td>
+            <td className={(finalChips[key].chipNumbers.indexOf('wildcard2') != -1) ? "usedChip" : "notUsed"}>{(finalChips[key].chipNumbers.indexOf('wildcard2') != -1) ? 'Used' : 'X'}</td>
 
-            <td className={(finalChips[key].chipNumbers.indexOf(3) != -1) ? "usedChip" : "notUsed"}>{(finalChips[key].chipNumbers.indexOf(3) != -1) ? 'Used' : 'X'}</td>
+            <td className={(finalChips[key].chipNumbers.indexOf('freehit') != -1) ? "usedChip" : "notUsed"}>{(finalChips[key].chipNumbers.indexOf('freehit') != -1) ? 'Used' : 'X'}</td>
 
-            <td className={(finalChips[key].chipNumbers.indexOf(4) != -1) ? "usedChip" : "notUsed"}>{(finalChips[key].chipNumbers.indexOf(4) != -1) ? 'Used' : 'X'}</td>
+            <td className={(finalChips[key].chipNumbers.indexOf('3xc') != -1) ? "usedChip" : "notUsed"}>{(finalChips[key].chipNumbers.indexOf('3xc') != -1) ? 'Used' : 'X'}</td>
 
-            <td className={(finalChips[key].chipNumbers.indexOf(5) != -1) ? "usedChip" : "notUsed"}>{(finalChips[key].chipNumbers.indexOf(5) != -1) ? 'Used' : 'X'}</td>
+            <td className={(finalChips[key].chipNumbers.indexOf('bboost') != -1) ? "usedChip" : "notUsed"}>{(finalChips[key].chipNumbers.indexOf('bboost') != -1) ? 'Used' : 'X'}</td>
 
 
                                 </tr>
