@@ -85,17 +85,17 @@ const url = 'https://ffwhatif.herokuapp.com/proxy.php';
         isLoading: true
       })
 
-    fetch("http://localhost:4000/todos/fish/" + this.state.leagueId)
+    fetch("/todos/fish/" + this.state.leagueId)
       .then(res => res.json())
       .then(res => JSON.parse(res))
       .then(
       response => {
         varItems = response.standings.results;
         this.leagueName = response.league.name;
-        for (var i=0; i<varItems.length; i++){ 
+        for (var i=0; i<varItems.length; i++){
           this.tempArray.push(varItems[i].entry);
-        } 
-      }, 
+        }
+      },
       ).then( response => {
         for(var i=0; i<this.tempArray.length; i++){ fetch(url+"?csurl=https://fantasy.premierleague.com/api/entry/" + this.tempArray[i] + "/history/") .then(res=>res.json())
             .then(
