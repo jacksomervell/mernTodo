@@ -1,0 +1,82 @@
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
+Use this FPL tool to visualise your season's progress against a rival player.
+
+All you need to do is put your team ID and your rival's team ID into the boxes below, and click 'Generate Graph!'
+
+To find your team ID, click on the points tab and look for the number in the URL: <strong>https://fantasy.premierleague.com/a/team/YOUR_TEAM_ID/event/1</strong> . That’s the number you want!
+
+&nbsp;
+
+&nbsp;
+<div style="margin-top: 10px; display: block; text-align: center;">
+
+<label>Your ID:</label>
+<input id="playerOneId" style="border: 1px solid grey; margin-bottom: 5px;" type="number" />
+<div id="p1warning" style="display: none;">Enter your user ID!</div>
+<label>Your rival's ID:</label>
+<input id="playerTwoId" style="border: 1px solid grey; margin-bottom: 5px;" type="number" />
+<div id="p2warning" style="display: none;">
+
+Enter your rival's ID!
+
+</div>
+<button id="getLeagueData" style="background-color: darkred; color: white; cursor: pointer; border: 0px; margin: 0 auto; height: 38px;"><strong>Generate Graph!</strong></button>
+<div id="generating" style="display: none;">
+
+Generating graph...
+
+</div>
+</div>
+<div id="player_chart_div"></div>
+<div></div>
+&nbsp;
+For more handy FPL Tools,<a href="https://www.game-change.co.uk/fpl-tools/"> click here.</a>
+
+For an excellent book on Mastering FPL from Amazon, <a href="https://www.amazon.com/gp/product/B01IQEB5AK/ref=as_li_tl?ie=UTF8&amp;tag=gamechangecou-20&amp;camp=1789&amp;creative=9325&amp;linkCode=as2&amp;creativeASIN=B01IQEB5AK&amp;linkId=70422e33aa2bbbf0e68eb923bfe06724">click here</a>.
+
+<script>var url='https://ffwhatif.herokuapp.com/proxy.php';$('#getLeagueData').on('click',function(){if($('#playerOneId').val()==''){$('#p1warning').slideDown();return}
+if($('#playerTwoId').val()==''){$('#p2warning').slideDown();return}
+$('#p1warning').slideUp();$('#p2warning').slideUp();$('#generating').slideDown();var leagueId=$('#leagueId').val()
+google.charts.load('current',{packages:['corechart']});google.charts.setOnLoadCallback(drawPlayerChart);function drawPlayerChart(){var playerChart=new google.visualization.DataTable();var leagueLength=0;var options={pointShape:{type:'star',sides:5,dent:0.5},pointSize:10,animation:{duration:1000,startup:!0,},hAxis:{title:'Gameweeks',},vAxis:{title:'Score',gridlines:!0,},series:{1:{curveType:'function'},states:{hover:{enabled:!0,lineWidth:5}},},'width':'100%','height':800,lineWidth:1,legend:{textStyle:{fontSize:12},cursor:'pointer',},'curveType':'function','crosshair':{trigger:'none'}};var gw1=['Week 1'];var gw2=['Week 2'];var gw3=['3'];var gw4=['4'];var gw5=['5'];var gw6=['6'];var gw7=['7'];var gw8=['8'];var gw9=['9'];var gw10=['10'];var gw11=['11'];var gw12=['12'];var gw13=['13'];var gw14=['14'];var gw15=['15'];var gw16=['16'];var gw17=['17'];var gw18=['18'];var gw19=['19'];var gw20=['20'];var gw21=['21'];var gw22=['22'];var gw23=['23'];var gw24=['24'];var gw25=['25'];var gw26=['26'];var gw27=['27'];var gw28=['28'];var gw29=['29'];var gw30=['30'];var gw31=['31'];var gw32=['32'];var gw33=['33'];var gw34=['34'];var gw35=['35'];var gw36=['36'];var gw37=['37'];var gw38=['38'];var playerIds=[];var playerOneName;var playerTwoName;$.ajax({url:url,data:{csurl:'https://fantasy.premierleague.com/api/entry/'+$('#playerOneId').val()+'/'},success:function(data){playerOneName=data.player_first_name+' '+data.player_last_name}})
+$.ajax({url:url,data:{csurl:'https://fantasy.premierleague.com/api/entry/'+$('#playerTwoId').val()+'/'},success:function(data){playerTwoName=data.player_first_name+' '+data.player_last_name}})
+playerIds.push($('#playerOneId').val());playerIds.push($('#playerTwoId').val());var fish=$.each(playerIds,function(i,val){$.ajax({url:url,data:{csurl:'https://fantasy.premierleague.com/api/entry/'+val+'/event/1/picks/'},success:function(data){points=data.entry_history.overall_rank;gw1.push(points)}})
+$.ajax({url:url,data:{csurl:'https://fantasy.premierleague.com/api/entry/'+val+'/event/2/picks/'},success:function(data){points=data.entry_history.overall_rank;gw2.push(points)}})
+$.ajax({url:url,data:{csurl:'https://fantasy.premierleague.com/api/entry/'+val+'/event/3/picks/'},success:function(data){points=data.entry_history.overall_rank;gw3.push(points)}})
+$.ajax({url:url,data:{csurl:'https://fantasy.premierleague.com/api/entry/'+val+'/event/4/picks/'},success:function(data){points=data.entry_history.overall_rank;gw4.push(points)}})
+$.ajax({url:url,data:{csurl:'https://fantasy.premierleague.com/api/entry/'+val+'/event/5/picks/'},success:function(data){points=data.entry_history.overall_rank;gw5.push(points)}})
+$.ajax({url:url,data:{csurl:'https://fantasy.premierleague.com/api/entry/'+val+'/event/6/picks/'},success:function(data){points=data.entry_history.overall_rank;gw6.push(points)}})
+$.ajax({url:url,data:{csurl:'https://fantasy.premierleague.com/api/entry/'+val+'/event/7/picks/'},success:function(data){points=data.entry_history.overall_rank;gw7.push(points)}})
+$.ajax({url:url,data:{csurl:'https://fantasy.premierleague.com/api/entry/'+val+'/event/8/picks/'},success:function(data){points=data.entry_history.overall_rank;gw8.push(points)}})
+$.ajax({url:url,data:{csurl:'https://fantasy.premierleague.com/api/entry/'+val+'/event/9/picks/'},success:function(data){points=data.entry_history.overall_rank;gw9.push(points)}})
+$.ajax({url:url,data:{csurl:'https://fantasy.premierleague.com/api/entry/'+val+'/event/10/picks/'},success:function(data){points=data.entry_history.overall_rank;gw10.push(points)}})
+$.ajax({url:url,data:{csurl:'https://fantasy.premierleague.com/api/entry/'+val+'/event/11/picks/'},success:function(data){points=data.entry_history.overall_rank;gw11.push(points)}})
+$.ajax({url:url,data:{csurl:'https://fantasy.premierleague.com/api/entry/'+val+'/event/12/picks/'},success:function(data){points=data.entry_history.overall_rank;gw12.push(points)}})
+$.ajax({url:url,data:{csurl:'https://fantasy.premierleague.com/api/entry/'+val+'/event/13/picks/'},success:function(data){points=data.entry_history.overall_rank;gw13.push(points)}})
+$.ajax({url:url,data:{csurl:'https://fantasy.premierleague.com/api/entry/'+val+'/event/14/picks/'},success:function(data){points=data.entry_history.overall_rank;gw14.push(points)}})
+$.ajax({url:url,data:{csurl:'https://fantasy.premierleague.com/api/entry/'+val+'/event/15/picks/'},success:function(data){points=data.entry_history.overall_rank;gw15.push(points)}})
+$.ajax({url:url,data:{csurl:'https://fantasy.premierleague.com/api/entry/'+val+'/event/16/picks/'},success:function(data){points=data.entry_history.overall_rank;gw16.push(points)}})
+$.ajax({url:url,data:{csurl:'https://fantasy.premierleague.com/api/entry/'+val+'/event/17/picks/'},success:function(data){points=data.entry_history.overall_rank;gw17.push(points)}})
+$.ajax({url:url,data:{csurl:'https://fantasy.premierleague.com/api/entry/'+val+'/event/18/picks/'},success:function(data){points=data.entry_history.overall_rank;gw18.push(points)}})
+$.ajax({url:url,data:{csurl:'https://fantasy.premierleague.com/api/entry/'+val+'/event/19/picks/'},success:function(data){points=data.entry_history.overall_rank;gw19.push(points)}})
+$.ajax({url:url,data:{csurl:'https://fantasy.premierleague.com/api/entry/'+val+'/event/20/picks/'},success:function(data){points=data.entry_history.overall_rank;gw20.push(points)}})
+$.ajax({url:url,data:{csurl:'https://fantasy.premierleague.com/api/entry/'+val+'/event/21/picks/'},success:function(data){points=data.entry_history.overall_rank;gw21.push(points)}})
+$.ajax({url:url,data:{csurl:'https://fantasy.premierleague.com/api/entry/'+val+'/event/22/picks/'},success:function(data){points=data.entry_history.overall_rank;gw22.push(points)}})
+$.ajax({url:url,data:{csurl:'https://fantasy.premierleague.com/api/entry/'+val+'/event/23/picks/'},success:function(data){points=data.entry_history.overall_rank;gw23.push(points)}})
+$.ajax({url:url,data:{csurl:'https://fantasy.premierleague.com/api/entry/'+val+'/event/24/picks/'},success:function(data){points=data.entry_history.overall_rank;gw24.push(points)}})
+$.ajax({url:url,data:{csurl:'https://fantasy.premierleague.com/api/entry/'+val+'/event/25/picks/'},success:function(data){points=data.entry_history.overall_rank;gw25.push(points)}})
+$.ajax({url:url,data:{csurl:'https://fantasy.premierleague.com/api/entry/'+val+'/event/26/picks/'},success:function(data){points=data.entry_history.overall_rank;gw26.push(points)}})
+$.ajax({url:url,data:{csurl:'https://fantasy.premierleague.com/api/entry/'+val+'/event/27/picks/'},success:function(data){points=data.entry_history.overall_rank;gw27.push(points)}})
+$.ajax({url:url,data:{csurl:'https://fantasy.premierleague.com/api/entry/'+val+'/event/28/picks/'},success:function(data){points=data.entry_history.overall_rank;gw28.push(points)}})
+$.ajax({url:url,data:{csurl:'https://fantasy.premierleague.com/api/entry/'+val+'/event/29/picks/'},success:function(data){points=data.entry_history.overall_rank;gw29.push(points)}})
+$.ajax({url:url,data:{csurl:'https://fantasy.premierleague.com/api/entry/'+val+'/event/30/picks/'},success:function(data){points=data.entry_history.overall_rank;gw30.push(points)}})
+$.ajax({url:url,data:{csurl:'https://fantasy.premierleague.com/api/entry/'+val+'/event/31/picks/'},success:function(data){points=data.entry_history.overall_rank;gw31.push(points)}})
+$.ajax({url:url,data:{csurl:'https://fantasy.premierleague.com/api/entry/'+val+'/event/32/picks/'},success:function(data){points=data.entry_history.overall_rank;gw32.push(points)}})
+$.ajax({url:url,data:{csurl:'https://fantasy.premierleague.com/api/entry/'+val+'/event/33/picks/'},success:function(data){points=data.entry_history.overall_rank;gw33.push(points)}})
+$.ajax({url:url,data:{csurl:'https://fantasy.premierleague.com/api/entry/'+val+'/event/34/picks/'},success:function(data){points=data.entry_history.overall_rank;gw34.push(points)}})
+$.ajax({url:url,data:{csurl:'https://fantasy.premierleague.com/api/entry/'+val+'/event/35/picks/'},success:function(data){points=data.entry_history.overall_rank;gw35.push(points)}})
+$.ajax({url:url,data:{csurl:'https://fantasy.premierleague.com/api/entry/'+val+'/event/36/picks/'},success:function(data){points=data.entry_history.overall_rank;gw36.push(points)}})
+$.ajax({url:url,data:{csurl:'https://fantasy.premierleague.com/api/entry/'+val+'/event/37/picks/'},success:function(data){points=data.entry_history.overall_rank;gw37.push(points)}})
+$.ajax({url:url,data:{csurl:'https://fantasy.premierleague.com/api/entry/'+val+'/event/38/picks/'},success:function(data){points=data.entry_history.overall_rank;gw38.push(points)}})})
+$(document).ajaxStop(function(){$(this).unbind("ajaxStop");useThese=[];allWeeks=[gw1,gw2,gw3,gw4,gw5,gw6,gw7,gw8,gw9,gw10,gw11,gw12,gw13,gw14,gw15,gw16,gw17,gw18,gw19,gw20,gw21,gw22,gw23,gw24,gw25,gw26,gw27,gw28,gw29,gw30,gw31,gw32,gw33,gw34,gw35,gw36,gw37,gw38];for(i=0;i<allWeeks.length;i++){if(allWeeks[i].length>2){useThese.push(allWeeks[i])}}
+playerChart.addColumn('string','X');playerChart.addColumn('number',playerOneName);playerChart.addColumn('number',playerTwoName);playerChart.addRows(useThese);var chart=new google.visualization.LineChart(document.getElementById('player_chart_div'));chart.draw(playerChart,options);$('#generating').slideUp()})}})</script>
