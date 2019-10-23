@@ -7,11 +7,15 @@ const todoRoutes = express.Router();
 const PORT = 4000;
 const axios = require('axios')
 var request = require('request');
+var https = require('https');
+https.post = require('https-post');
+var cookieParser = require('cookie-parser');
 
 let Todo = require('./todo.model');
 
 app.use(cors());
 app.use(bodyParser.json());
+app.use(cookieParser());
 
 // mongoose.connect('mongodb://127.0.0.1:27017/todos', { useNewUrlParser: true });
 // const connection = mongoose.connection;
@@ -23,17 +27,40 @@ app.use(bodyParser.json());
 
 
 todoRoutes.route('/fish/:leagueId').get(function(req, res) {
-    let { PythonShell } = require('python-shell')
 
-    let options = {
-        args: [req.params.leagueId]
-    }
 
-    PythonShell.run('backend/Python/auth.py', options, function (err, results) {
-        if (err) throw err;
-        // results is an array consisting of messages collected during execution
-        res.json(results[1]);
-    });
+
+    const url = 'https://users.premierleague.com/accounts/login/';
+
+    function getHttpsCookies(callback) {
+        https.post(url, {
+            redirect_uri: 'https://fantasy.premierleague.com/a/login',
+            app: 'plfpl-web',
+            login: 'jacksomervell@gmail.com',
+            password: 'Littlederek12'
+        }, function(res) {
+            console.log(res.headers['set-cookie'][0]);
+            })
+
+        }
+
+    getHttpsCookies(function (err, res) {
+        if (!err)
+            console.log(res)
+    })
+
+
+    // let { PythonShell } = require('python-shell')
+
+    // let options = {
+    //     args: [req.params.leagueId]
+    // }
+
+    // PythonShell.run('backend/Python/auth.py', options, function (err, results) {
+    //     if (err) throw err;
+    //     // results is an array consisting of messages collected during execution
+    //     res.json(results[1]);
+    // });
 
 });
 
