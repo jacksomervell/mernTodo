@@ -87,7 +87,6 @@ const url = 'https://ffwhatif.herokuapp.com/proxy.php';
 
     fetch("/todos/fish/" + this.state.leagueId)
       .then(res => res.json())
-      .then(res => JSON.parse(res))
       .then(
       response => {
         varItems = response.standings.results;

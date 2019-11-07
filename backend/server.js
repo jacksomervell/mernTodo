@@ -46,6 +46,7 @@ todoRoutes.route('/fish/:leagueId').get(function(req, res) {
                         Cookie: cookie
                     }
                 }).then((response) => {
+                    console.log(response);
                     res.json(response.data);
                 })
             }
