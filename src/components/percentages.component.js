@@ -59,7 +59,7 @@ const url = 'https://ffwhatif.herokuapp.com/proxy.php';
     this.leagueName = ''
     let url = 'https://ffwhatif.herokuapp.com/proxy.php';
 
-    fetch("/todos/fish/" + this.state.leagueId)
+    fetch("https://fierce-chamber-40748.herokuapp.com/todos/fish/" + this.state.leagueId)
       .then(res => res.json())
       .then(
       response => {
