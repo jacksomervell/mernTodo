@@ -8,6 +8,8 @@ import PercTable from "./components/percentages.component";
 import ChipChecker from "./components/chip-checker.component";
 import YouRival from "./components/youvsrival.component";
 import Home from "./components/home.component";
+import WhatIfLeague from "./components/whatifleague.component";
+
 import {Container, Navbar, Nav, NavDropdown} from 'react-bootstrap';
 
 class App extends Component {
@@ -25,6 +27,7 @@ class App extends Component {
                   <NavDropdown.Item as={Link} to="/percentages">Player Ownership Percentages</NavDropdown.Item>
                   <NavDropdown.Item as={Link} to="/chip-checker">Chip Checker</NavDropdown.Item>
                   <NavDropdown.Item as={Link} to="/you-vs-rival">You vs a Rival</NavDropdown.Item>
+                  <NavDropdown.Item as={Link} to="/whatifleague">What-If League</NavDropdown.Item>
                 </NavDropdown>
                   <Nav.Link as={Link} to="/blog" >Blog</Nav.Link>
                   <Nav.Link as={Link} to="/podcasts" >Podcasts</Nav.Link>
@@ -38,6 +41,7 @@ class App extends Component {
           <Route path="/percentages" component={PercTable} />
           <Route path="/chip-checker" component={ChipChecker} />
           <Route path="/you-vs-rival" component={YouRival} />
+          <Route path="/whatifleague" component={WhatIfLeague} />
         </Container>
       </Router>
     );

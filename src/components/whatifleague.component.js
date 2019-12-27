@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';
 
 
-export default class WhatIf extends Component {
+export default class WhatIfLeague extends Component {
 
   constructor(props) {
         super(props);
