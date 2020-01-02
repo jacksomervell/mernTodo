@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';
 
 
-export default class WhatIf extends Component {
+export default class WhatIfLeague extends Component {
 
   constructor(props) {
         super(props);
@@ -70,7 +70,8 @@ export default class WhatIf extends Component {
 
           for (var i = 0; i < this.tempArray.length; i++) {
             this.allScores.push(this.whatIfForTeam(this.tempArray[i]));
-        }
+         }
+         console.log(this.allScores);
         }
 
         )
@@ -216,125 +217,8 @@ export default class WhatIf extends Component {
       return <div>Error: {error.message}</div>;
     } else {
       return (
-      <div className={"containWhatif"}>
-      <div className="input-group mb-3">
-      <input type="text" className={"mainInput"} value={this.state.teamId} onChange={this.handleChange} />
-        <div className="input-group-append">
-          <button type="button"
-            onClick={()=>{this.onButtonClick();}}
-            style={{cursor:'pointer'}}
-           className={'whatifButton btn btn-outline-secondary'}
-           disabled={!teamId}
-            > Calculate
-          </button>
-        </div>
-      </div>
-
-      {teamName.length > 0 &&
-        <h1>{teamName}</h1>
-      }
-
-      <div>
-
-          <div className={"playerbar"}>
-
-          {playerArray.map(item => {
-
-          if(item.element_type == 1 && playerArray.indexOf(item) < 11){
-             return <div key={item.id} className={"starter"}>
-                <span className="pointSpan">{item.web_name} { item.is_cap == true ? '(c)' : item.is_vice == true ? '(vc)' : ''}</span>
-                <span className="pointSpan">{item.total_points} points</span>
-              </div>
-            }
-
-          })}
-
-          </div>
-
-          <div className={"playerbar"}>
-
-          {playerArray.map(item => {
-
-          if(item.element_type == 2 && playerArray.indexOf(item) < 11){
-             return <div key={item.id} className={"starter"}>
-                <span className="pointSpan">{item.web_name} { item.is_cap == true ? '(c)' : item.is_vice == true ? '(vc)' : ''}</span>
-                <span className="pointSpan">{item.total_points} points</span>
-              </div>
-            }
-
-          })}
-
-          </div>
-
-          <div className={"playerbar"}>
-
-
-          {playerArray.map(item => {
-
-            if(item.element_type == 3 && playerArray.indexOf(item) < 11){
-             return <div key={item.id} className={"starter"}>
-                <span className="pointSpan">{item.web_name} { item.is_cap == true ? '(c)' : item.is_vice == true ? '(vc)' : ''}</span>
-                <span className="pointSpan">{item.total_points} points</span>
-              </div>
-            }
-
-          })}
-
-          </div>
-
-          <div className={"playerbar"}>
-
-
-          {playerArray.map(item => {
-
-            if(item.element_type == 4 && playerArray.indexOf(item) < 11){
-             return <div key={item.id} className={"starter"}>
-                <span className="pointSpan">{item.web_name} { item.is_cap == true ? '(c)' : item.is_vice == true ? '(vc)' : ''}</span>
-                <span className="pointSpan">{item.total_points} points</span>
-              </div>
-            }
-
-          })}
-
-          </div>
-
-          <div className={"subbar"}>
-
-          {playerArray.map(item => {
-
-            if(playerArray.indexOf(item) >= 11){
-             return <div key={item.id} className={"sub"}>
-                <span className="pointSpan">{item.web_name} { item.is_cap == true ? '(c)' : item.is_vice == true ? '(vc)' : ''}</span>
-                <span className="pointSpan">{item.total_points} points</span>
-              </div>
-            }
-
-          })}
-
-          </div>
-
-      </div>
-
-      {teamName.length > 0 &&
-        <h1>{outfieldScore} points</h1>
-      }
-
-    {teamName.length > 0 &&
-
-      <div>
-       <p>If <strong>{teamName}</strong> had made no changes since GW1, their score would be <strong>{outfieldScore}.</strong> </p>
-       <p>...with <strong>{pointsComingOn}</strong> points coming from the bench via automatic subs, and <strong>{vicecaptScore}</strong> extra points coming from their Vice Captain when their Captain didn't play.</p>
-       <p>They captained {captain} who's scored {captainScore * 0.5} points so far. They should have captained {highestScorer}, who has {highestScore} points so far.</p>
-       {captain == highestScorer &&
-       <p>...wait... that's the same player! Good job picking your captain! </p>
-       }
-       {captain != highestScorer &&
-       <p> If they had, their GW1 team would have {outfieldScore - (0.5 * captainScore) + highestScore} points!</p>
-       }
-      </div>
-    }
-      </div>
-      );
+      <div>Hi</div>
+      )
     }
   }
 
