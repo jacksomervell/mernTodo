@@ -27,6 +27,7 @@ class App extends Component {
                   <NavDropdown.Item as={Link} to="/chip-checker">Chip Checker</NavDropdown.Item>
                   <NavDropdown.Item as={Link} to="/you-vs-rival">You vs a Rival</NavDropdown.Item>
                   <NavDropdown.Item as={Link} to="/what-if-league">What-if Minileague Machine</NavDropdown.Item>
+
                 </NavDropdown>
                   <Nav.Link as={Link} to="/blog" >Blog</Nav.Link>
                   <Nav.Link as={Link} to="/podcasts" >Podcasts</Nav.Link>
@@ -41,6 +42,7 @@ class App extends Component {
           <Route path="/chip-checker" component={ChipChecker} />
           <Route path="/you-vs-rival" component={YouRival} />
           <Route path="/what-if-league" component={WhatIfLeague} />
+
         </Container>
       </Router>
     );
