@@ -12,14 +12,15 @@ export default class WhatIfLeague extends Component {
 
         this.state = {
        coreData:'',
-       currentWeek:''
+       currentWeek:'',
+       leagueId:''
         }
 
       }
 
   handleChange(event) {
 
-    this.setState({teamId: event.target.value,
+    this.setState({leagueId: event.target.value,
               });
   }
 
@@ -67,9 +68,11 @@ export default class WhatIfLeague extends Component {
         },
       ).then(
         response => {
+          //console.log(this.whatIfForTeam(this.tempArray[0]));
 
           for (var i = 0; i < this.tempArray.length; i++) {
-            this.allScores.push(this.whatIfForTeam(this.tempArray[i]));
+            var hello = this.whatIfForTeamTest(this.tempArray[i])
+            this.allScores.push(hello);
          }
          console.log(this.allScores);
         }
@@ -77,8 +80,13 @@ export default class WhatIfLeague extends Component {
         )
 
   }
+  whatIfForTeamTest(teamId) {
+    return 'hiiii';
+  }
 
   whatIfForTeam(teamId) {
+
+    console.log(teamId);
 
     let playerName = '';
     let varItems = ''
@@ -136,8 +144,6 @@ export default class WhatIfLeague extends Component {
 //get the total mmax mins played for the seaosn so far
           var allMins = this.state.currentWeek * 90;
 
-          console.log(this.state);
-
           for (var i=0; i<11; i++){
             outScore = outScore + this.tempArray[i].total_points
 
@@ -192,19 +198,20 @@ export default class WhatIfLeague extends Component {
           scoreToAddFromSubs = totalMatchesMissed * averageSubScore;
 
           scoreToAddFromSubs = Math.abs(parseFloat(scoreToAddFromSubs.toFixed()));
-          console.log(scoreToAddFromSubs);
 
           outfieldscore = outScore + scoreToAddFromSubs + vicePointsToAdd;
+
        }
       )
       .then(
         (result) => {
-         fetch(url + "?csurl=https://fantasy.premierleague.com/api/entry/" + this.state.teamId +"/")
+         fetch(url + "?csurl=https://fantasy.premierleague.com/api/entry/" + teamId +"/")
          .then(res => res.json())
           .then(
             (result) => {
-                var teamName = result.player_first_name;
-                return [teamName, outfieldscore];
+                var teamName = result.player_first_name + ' ' + result.player_last_name;
+               return [teamName, outfieldscore];
+
             },
           )
         }
@@ -212,12 +219,22 @@ export default class WhatIfLeague extends Component {
   }
 
   render() {
-    const { error, isLoaded, items, coreData, player, score, playerArray, outfieldScore, teamId, teamName, currentWeek, subScore, highestScorer, highestScore, captain, captainScore, pointsComingOn, vicecaptScore} = this.state;
+    const { error, leagueId, isLoaded, items, coreData, player, score, playerArray, outfieldScore, teamId, teamName, currentWeek, subScore, highestScorer, highestScore, captain, captainScore, pointsComingOn, vicecaptScore} = this.state;
     if (error) {
       return <div>Error: {error.message}</div>;
     } else {
       return (
-      <div>Hi</div>
+      <div className="input-group mb-3">
+      <input type="text" className={"mainInput"} value={this.state.leagueId} onChange={this.handleChange} />
+        <div className="input-group-append">
+          <button type="button"
+            onClick={()=>{this.onButtonClick();}}
+            style={{cursor:'pointer'}}
+           className={'whatifButton btn btn-outline-secondary'}
+            > Calculate
+          </button>
+        </div>
+      </div>
       )
     }
   }
