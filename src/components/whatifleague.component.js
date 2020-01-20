@@ -13,7 +13,9 @@ export default class WhatIfLeague extends Component {
         this.state = {
        coreData:'',
        currentWeek:'',
-       leagueId:''
+       leagueId:'',
+       arrayOfScores: [],
+       leagueLength: 0,
         }
 
       }
@@ -51,7 +53,6 @@ export default class WhatIfLeague extends Component {
 
     let varItems = '';
     this.tempArray = [];
-    this.tempPlayerArray = [];
     this.leagueName = ''
     this.allScores = [];
 
@@ -65,28 +66,25 @@ export default class WhatIfLeague extends Component {
           for (var i = 0; i < varItems.length; i++) {
             this.tempArray.push(varItems[i].entry)
           }
+          this.setState({
+            leagueLength: this.tempArray.length
+          })
         },
       ).then(
         response => {
-          //console.log(this.whatIfForTeam(this.tempArray[0]));
 
-          for (var i = 0; i < this.tempArray.length; i++) {
-            var hello = this.whatIfForTeamTest(this.tempArray[i])
-            this.allScores.push(hello);
-         }
-         console.log(this.allScores);
-        }
+        const whatIfForTeam = this.whatIfForTeam;
+        const tempArray = this.tempArray;
 
+         tempArray.forEach(async function(listItem, index){
+          await whatIfForTeam(listItem);
+         });
+
+      }
         )
-
-  }
-  whatIfForTeamTest(teamId) {
-    return 'hiiii';
   }
 
-  whatIfForTeam(teamId) {
-
-    console.log(teamId);
+  whatIfForTeam = (teamId) => {
 
     let playerName = '';
     let varItems = ''
@@ -105,6 +103,12 @@ export default class WhatIfLeague extends Component {
       .then(
       (result) => {
         varItems = result;
+
+        if(varItems.detail == 'Not found.'){
+          this.setState({ arrayOfScores: [...this.state.arrayOfScores, {teamName:'Nope', outfieldscore: '0'}] })
+          return;
+        }
+
         for (var i=0; i<15; i++){
           this.tempArray.push(this.state.coreData.find(theplayer => theplayer.id === varItems.picks[i].element))
           if(this.tempArray[i].is_cap == true){
@@ -210,8 +214,8 @@ export default class WhatIfLeague extends Component {
           .then(
             (result) => {
                 var teamName = result.player_first_name + ' ' + result.player_last_name;
-               return [teamName, outfieldscore];
-
+              console.log([teamName, outfieldscore]);
+              this.setState({ arrayOfScores: [...this.state.arrayOfScores, { teamName, outfieldscore }] })
             },
           )
         }
@@ -219,11 +223,12 @@ export default class WhatIfLeague extends Component {
   }
 
   render() {
-    const { error, leagueId, isLoaded, items, coreData, player, score, playerArray, outfieldScore, teamId, teamName, currentWeek, subScore, highestScorer, highestScore, captain, captainScore, pointsComingOn, vicecaptScore} = this.state;
+    const { error, arrayOfScores, leagueLength} = this.state;
     if (error) {
       return <div>Error: {error.message}</div>;
     } else {
       return (
+        <div>
       <div className="input-group mb-3">
       <input type="text" className={"mainInput"} value={this.state.leagueId} onChange={this.handleChange} />
         <div className="input-group-append">
@@ -234,6 +239,20 @@ export default class WhatIfLeague extends Component {
             > Calculate
           </button>
         </div>
+      </div>
+
+      { arrayOfScores.length > 1 && arrayOfScores.length >= leagueLength &&
+        <table>
+            {arrayOfScores.map(item => {
+
+              return <tr className='row'>
+                <td className='Name'> {item.teamName}</td>
+                <td className='Score'>{item.outfieldscore}</td>
+              </tr>
+          })}
+        </table>
+      }
+
       </div>
       )
     }
