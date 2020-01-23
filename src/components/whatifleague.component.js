@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
+import { isEmptyStatement } from '@babel/types';
 
 
 export default class WhatIfLeague extends Component {
@@ -74,10 +75,11 @@ export default class WhatIfLeague extends Component {
         response => {
 
         const whatIfForTeam = this.whatIfForTeam;
+        this.tempArray = this.tempArray.slice(0,50);
         const tempArray = this.tempArray;
 
-         tempArray.forEach(async function(listItem, index){
-          await whatIfForTeam(listItem);
+         tempArray.forEach(function(listItem, index){
+          whatIfForTeam(listItem);
          });
 
       }
@@ -88,7 +90,7 @@ export default class WhatIfLeague extends Component {
 
     let playerName = '';
     let varItems = ''
-    this.tempArray = [];
+    let tempArray = [];
     this.state.playerArray = [];
     var capt = '';
     var captScore = '';
@@ -105,30 +107,33 @@ export default class WhatIfLeague extends Component {
         varItems = result;
 
         if(varItems.detail == 'Not found.'){
-          this.setState({ arrayOfScores: [...this.state.arrayOfScores, {teamName:'Nope', outfieldscore: '0'}] })
+          this.setState({ arrayOfScores: [...this.state.arrayOfScores, {teamName:'Team ID ' + teamId + ' did not join in GW1', outfieldscore: ''}] })
           return;
         }
 
         for (var i=0; i<15; i++){
-          this.tempArray.push(this.state.coreData.find(theplayer => theplayer.id === varItems.picks[i].element))
-          if(this.tempArray[i].is_cap == true){
-            this.tempArray[i].total_points = 0.5 * this.tempArray[i].total_points;
-            this.tempArray[i].is_cap = false;
+          tempArray.push(this.state.coreData.find(theplayer => theplayer.id === varItems.picks[i].element))
+          console.log(tempArray[i].total_points);
+
+
+          if(tempArray[i].is_cap == true){
+            tempArray[i].total_points = 0.5 * tempArray[i].total_points;
+            tempArray[i].is_cap = false;
           }
 
-          if(varItems.picks[i].is_captain == true && this.tempArray[i].is_cap != true){
-            this.tempArray[i].is_cap = true
-            this.tempArray[i].total_points = this.tempArray[i].total_points * 2;
-            capt = this.tempArray[i].web_name;
-            captScore = this.tempArray[i].total_points;
+          if(varItems.picks[i].is_captain == true && tempArray[i].is_cap != true){
+            tempArray[i].is_cap = true
+            tempArray[i].total_points = tempArray[i].total_points * 2;
+            capt = tempArray[i].web_name;
+            captScore = tempArray[i].total_points;
             }
 
 //vice stuff here
 
-            if(varItems.picks[i].is_vice_captain == true && this.tempArray[i].is_vice != true){
-            this.tempArray[i].is_vice = true
-            vicecapt = this.tempArray[i].web_name;
-            vicecaptScore = this.tempArray[i].total_points;
+            if(varItems.picks[i].is_vice_captain == true && tempArray[i].is_vice != true){
+            tempArray[i].is_vice = true
+            vicecapt = tempArray[i].web_name;
+            vicecaptScore = tempArray[i].total_points;
             }
 
         }
@@ -148,18 +153,27 @@ export default class WhatIfLeague extends Component {
 //get the total mmax mins played for the seaosn so far
           var allMins = this.state.currentWeek * 90;
 
+          if(tempArray.length < 1){
+            return;
+          }
+          console.log(tempArray);
           for (var i=0; i<11; i++){
-            outScore = outScore + this.tempArray[i].total_points
 
+            if(isNaN(tempArray[i].total_points)){
+              outScore = outScore + 0;
+            } else {
+            outScore = outScore + tempArray[i].total_points
+            }
+            console.log(outScore);
           //calc how many matches theyve missed
-            var minsPlayed = this.tempArray[i].minutes;
+            var minsPlayed = tempArray[i].minutes;
             var minsMissed = allMins - minsPlayed;
             var matchesMissed = minsMissed/90;
             totalMatchesMissed = totalMatchesMissed + matchesMissed;
           }
 
           for (var i=11; i<15; i++){
-            subScore = subScore + this.tempArray[i].total_points
+            subScore = subScore + tempArray[i].total_points
           }
 
           var capMatchesMissed = 0;
@@ -169,16 +183,16 @@ export default class WhatIfLeague extends Component {
           for (var i=0; i<15; i++){
 
           //calc the highest score and highest scorer
-            if (this.tempArray[i].total_points > highestScore && this.tempArray[i].is_cap != true){
-              highestScore = this.tempArray[i].total_points;
-              highestScorer = this.tempArray[i].web_name;
+            if (tempArray[i].total_points > highestScore && tempArray[i].is_cap != true){
+              highestScore = tempArray[i].total_points;
+              highestScorer = tempArray[i].web_name;
             }
 
-            if (this.tempArray[i].total_points * 0.5 > highestScore && this.tempArray[i].is_cap == true){
-              highestScore = this.tempArray[i].total_points * 0.5;
-              highestScorer = this.tempArray[i].web_name;
+            if (tempArray[i].total_points * 0.5 > highestScore && tempArray[i].is_cap == true){
+              highestScore = tempArray[i].total_points * 0.5;
+              highestScorer = tempArray[i].web_name;
 //how many matches did the captian miss?
-              var minsPlayed = this.tempArray[i].minutes;
+              var minsPlayed = tempArray[i].minutes;
               var minsMissed = allMins - minsPlayed;
               var matchesMissed = minsMissed/90;
               capMatchesMissed = matchesMissed;
@@ -187,8 +201,8 @@ export default class WhatIfLeague extends Component {
 
 //calc the vice points to add
           for (var i=0; i<15; i++){
-            if (this.tempArray[i].is_vice == true){
-              var vicePPG = parseInt(this.tempArray[i].points_per_game);
+            if (tempArray[i].is_vice == true){
+              var vicePPG = parseInt(tempArray[i].points_per_game);
               vicePointsToAdd = vicePPG * capMatchesMissed;
             }
 
@@ -205,6 +219,8 @@ export default class WhatIfLeague extends Component {
 
           outfieldscore = outScore + scoreToAddFromSubs + vicePointsToAdd;
 
+          console.log(teamId, [outScore, scoreToAddFromSubs, vicePointsToAdd, totalMatchesMissed, averageSubScore]);
+
        }
       )
       .then(
@@ -214,7 +230,6 @@ export default class WhatIfLeague extends Component {
           .then(
             (result) => {
                 var teamName = result.player_first_name + ' ' + result.player_last_name;
-              console.log([teamName, outfieldscore]);
               this.setState({ arrayOfScores: [...this.state.arrayOfScores, { teamName, outfieldscore }] })
             },
           )
