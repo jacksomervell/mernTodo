@@ -10,6 +10,7 @@ export default class WhatIfLeague extends Component {
         super(props);
 
         this.handleChange = this.handleChange.bind(this);
+        this.onSort = this.onSort.bind(this)
 
         this.state = {
        coreData:'',
@@ -86,6 +87,20 @@ export default class WhatIfLeague extends Component {
         )
   }
 
+  onSort(event, sortKey) {
+    /*
+    assuming your data is something like
+    [
+      {accountname:'foo', negotiatedcontractvalue:'bar'},
+      {accountname:'monkey', negotiatedcontractvalue:'spank'},
+      {accountname:'chicken', negotiatedcontractvalue:'dance'},
+    ]
+    */
+    const data = this.state.arrayOfScores;
+    data.sort((a, b) => b[sortKey] - a[sortKey])
+    this.setState({ data })
+  }
+
   whatIfForTeam = (teamId) => {
 
     let playerName = '';
@@ -107,7 +122,7 @@ export default class WhatIfLeague extends Component {
         varItems = result;
 
         if(varItems.detail == 'Not found.'){
-          this.setState({ arrayOfScores: [...this.state.arrayOfScores, {teamName:'Team ID ' + teamId + ' did not join in GW1', outfieldscore: ''}] })
+          // this.setState({ arrayOfScores: [...this.state.arrayOfScores, {teamName: teamId + ' did not join in GW1', outfieldscore: 0}] })
           return;
         }
 
@@ -257,15 +272,29 @@ export default class WhatIfLeague extends Component {
       </div>
 
       { arrayOfScores.length > 1 && arrayOfScores.length >= leagueLength &&
-        <table>
-            {arrayOfScores.map(item => {
 
-              return <tr className='row'>
-                <td className='Name'> {item.teamName}</td>
-                <td className='Score'>{item.outfieldscore}</td>
+          <table className="table">
+            <thead>
+              <tr>
+                <th>Rank</th>
+                <th>Manager</th>
+                <th onClick={e => this.onSort(e, 'outfieldscore')} style={{cursor:'pointer', 'box-shadow':'inset 0 -3px 0 0 green'}}>What-if Score</th>
+                <th>Detail</th>
               </tr>
-          })}
-        </table>
+            </thead>
+            <tbody>
+              {arrayOfScores.map(function (account, index) {
+                return (
+                  <tr key={index} data-item={account}>
+                    <td data-title="Rank">{index + 1}</td>
+                    <td data-title="Name">{account.teamName}</td>
+                    <td data-title="Score">{account.outfieldscore}</td>
+                    <td data-title="Machine"><a href="/whatIf">View detail</a></td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
       }
 
       </div>
