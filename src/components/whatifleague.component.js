@@ -64,6 +64,7 @@ export default class WhatIfLeague extends Component {
       .then(
         response => {
           varItems = response.standings.results;
+          varItems = varItems.slice(0,50);
           this.leagueName = response.league.name;
           for (var i = 0; i < varItems.length; i++) {
             this.tempArray.push(varItems[i].entry)
@@ -76,7 +77,6 @@ export default class WhatIfLeague extends Component {
         response => {
 
         const whatIfForTeam = this.whatIfForTeam;
-        this.tempArray = this.tempArray.slice(0,50);
         const tempArray = this.tempArray;
 
          tempArray.forEach(function(listItem, index){
@@ -245,7 +245,10 @@ export default class WhatIfLeague extends Component {
           .then(
             (result) => {
                 var teamName = result.player_first_name + ' ' + result.player_last_name;
-              this.setState({ arrayOfScores: [...this.state.arrayOfScores, { teamName, outfieldscore }] })
+              const currentActual = result.summary_overall_points;
+              const currentTransfers = result.last_deadline_total_transfers;
+              const difference = currentActual - outfieldscore;
+              this.setState({ arrayOfScores: [...this.state.arrayOfScores, { teamName, outfieldscore, currentActual, currentTransfers, difference }] })
             },
           )
         }
@@ -279,6 +282,9 @@ export default class WhatIfLeague extends Component {
                 <th>Rank</th>
                 <th>Manager</th>
                 <th onClick={e => this.onSort(e, 'outfieldscore')} style={{cursor:'pointer', 'box-shadow':'inset 0 -3px 0 0 green'}}>What-if Score</th>
+                <th onClick={e => this.onSort(e, 'currentActual')} style={{cursor:'pointer', 'box-shadow':'inset 0 -3px 0 0 green'}}>Actual Score</th>
+                <th onClick={e => this.onSort(e, 'difference')} style={{cursor:'pointer', 'box-shadow':'inset 0 -3px 0 0 green'}}>Difference</th>
+                <th onClick={e => this.onSort(e, 'currentTransfers')} style={{ cursor: 'pointer', 'box-shadow': 'inset 0 -3px 0 0 green' }}>Transfers made</th>
                 <th>Detail</th>
               </tr>
             </thead>
@@ -289,6 +295,9 @@ export default class WhatIfLeague extends Component {
                     <td data-title="Rank">{index + 1}</td>
                     <td data-title="Name">{account.teamName}</td>
                     <td data-title="Score">{account.outfieldscore}</td>
+                    <td data-title="Score">{account.currentActual}</td>
+                    <td data-title="Score">{account.difference}</td>
+                    <td data-title="Score">{account.currentTransfers}</td>
                     <td data-title="Machine"><a href="/whatIf">View detail</a></td>
                   </tr>
                 );

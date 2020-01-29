@@ -27,7 +27,9 @@ export default class WhatIf extends Component {
       captainScore: '',
       capDiff: '',
       averageSubScore: '',
-      pointsComingOn: ''
+      pointsComingOn: '',
+      currentActual: 0,
+      currentTransfers: 0
     }
 
       }
@@ -118,8 +120,6 @@ export default class WhatIf extends Component {
 //get the total mmax mins played for the seaosn so far
           var allMins = this.state.currentWeek * 90;
 
-          console.log(this.state);
-
           for (var i=0; i<11; i++){
             outScore = outScore + this.tempArray[i].total_points
 
@@ -174,8 +174,6 @@ export default class WhatIf extends Component {
           scoreToAddFromSubs = totalMatchesMissed * averageSubScore;
 
           scoreToAddFromSubs = Math.abs(parseFloat(scoreToAddFromSubs.toFixed()));
-          console.log(scoreToAddFromSubs);
-
 
           this.setState({
             playerArray: this.tempArray,
@@ -198,9 +196,15 @@ export default class WhatIf extends Component {
          .then(res => res.json())
           .then(
             (result) => {
+              console.log(result);
                 var teamName = result.player_first_name;
+                const currentActual = result.summary_overall_points;
+                const currentTransfers = result.last_deadline_total_transfers;
+
                 this.setState({
                 teamName: teamName,
+                currentActual,
+                currentTransfers
                  });
             },
           )
@@ -209,7 +213,7 @@ export default class WhatIf extends Component {
   }
 
   render() {
-    const { error, isLoaded, items, coreData, player, score, playerArray, outfieldScore, teamId, teamName, currentWeek, subScore, highestScorer, highestScore, captain, captainScore, pointsComingOn, vicecaptScore} = this.state;
+    const { error, isLoaded, items, coreData, player, score, currentActual, currentTransfers, playerArray, outfieldScore, teamId, teamName, currentWeek, subScore, highestScorer, highestScore, captain, captainScore, pointsComingOn, vicecaptScore} = this.state;
     if (error) {
       return <div>Error: {error.message}</div>;
     } else {
@@ -329,6 +333,7 @@ export default class WhatIf extends Component {
        {captain != highestScorer &&
        <p> If they had, their GW1 team would have {outfieldScore - (0.5 * captainScore) + highestScore} points!</p>
        }
+       <p>Your current actual points are <strong> {currentActual} </strong>, and you've made {currentTransfers} transfers. So your transfer activity and captaincy choices have been <strong> worth a total of {currentActual - outfieldScore} points!</strong>  </p>
       </div>
     }
       </div>
