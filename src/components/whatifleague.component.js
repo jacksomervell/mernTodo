@@ -88,14 +88,6 @@ export default class WhatIfLeague extends Component {
   }
 
   onSort(event, sortKey) {
-    /*
-    assuming your data is something like
-    [
-      {accountname:'foo', negotiatedcontractvalue:'bar'},
-      {accountname:'monkey', negotiatedcontractvalue:'spank'},
-      {accountname:'chicken', negotiatedcontractvalue:'dance'},
-    ]
-    */
     const data = this.state.arrayOfScores;
     data.sort((a, b) => b[sortKey] - a[sortKey])
     this.setState({ data })
