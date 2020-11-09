@@ -18,8 +18,8 @@ export default class WhatIfLeague extends Component {
        leagueId:'',
        arrayOfScores: [],
        leagueLength: 0,
+       loading: false
         }
-
       }
 
   handleChange(event) {
@@ -52,12 +52,13 @@ export default class WhatIfLeague extends Component {
 
 
   onButtonClick(){
-
     let varItems = '';
     this.tempArray = [];
     this.leagueName = ''
     this.allScores = [];
-
+    this.setState({
+      loading: true
+    })
 
     fetch("https://fierce-chamber-40748.herokuapp.com/todos/fish/" + this.state.leagueId)
       .then(res => res.json())
@@ -240,7 +241,7 @@ export default class WhatIfLeague extends Component {
               const currentActual = result.summary_overall_points;
               const currentTransfers = result.last_deadline_total_transfers;
               const difference = currentActual - outfieldscore;
-              this.setState({ arrayOfScores: [...this.state.arrayOfScores, { teamName, outfieldscore, currentActual, currentTransfers, difference }] })
+              this.setState({ loading: false, arrayOfScores: [...this.state.arrayOfScores, { teamName, outfieldscore, currentActual, currentTransfers, difference }] })
             },
           )
         }
@@ -248,7 +249,7 @@ export default class WhatIfLeague extends Component {
   }
 
   render() {
-    const { error, arrayOfScores, leagueLength} = this.state;
+    const { error, arrayOfScores, leagueLength, loading} = this.state;
     if (error) {
       return <div>Error: {error.message}</div>;
     } else {
@@ -265,6 +266,7 @@ export default class WhatIfLeague extends Component {
           </button>
         </div>
       </div>
+      { loading ? <p>Loading...</p> : <span></span>}
 
       { arrayOfScores.length > 1 && arrayOfScores.length >= leagueLength &&
 

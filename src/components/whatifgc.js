@@ -41,7 +41,9 @@ The excellent book on Mastering FPL from Amazon, <a href="https://www.amazon.co.
       averageSubScore: '',
       pointsComingOn: '',
       currentActual: 0,
-      currentTransfers: 0
+      currentTransfers: 0,
+      currentValue: 0,
+      whatifValue: 0
     };
   },
 
@@ -127,9 +129,13 @@ handleChange(event) {
           var averageSubScore = 0;
           var totalMatchesMissed = 0;
           var scoreToAddFromSubs = 0;
+          let totalCost = 0;
+
 
 //get the total mmax mins played for the seaosn so far
-          var allMins = this.state.currentWeek * 90;
+          var allMins = (this.state.currentWeek) * 90;
+
+
 
           console.log(this.state);
 
@@ -170,6 +176,13 @@ handleChange(event) {
             }
           }
 
+          for (var i=0; i<15; i++){
+            let price = this.tempArray[i].now_cost / 10;
+            totalCost += price; 
+          }
+
+          totalCost =  Math.round(totalCost * 100) / 100;
+
 //calc the vice points to add
           for (var i=0; i<15; i++){
             if (this.tempArray[i].is_vice == true){
@@ -199,7 +212,8 @@ handleChange(event) {
             averageSubScore: averageSubScore,
             pointsComingOn: Math.abs(scoreToAddFromSubs),
             vicecaptScore: Math.abs(vicePointsToAdd),
-            vicecapt: vicecapt
+            vicecapt: vicecapt,
+            whatifValue: totalCost
         })
        }
       )
@@ -212,11 +226,13 @@ handleChange(event) {
                 var teamName = result.player_first_name;
               const currentActual = result.summary_overall_points;
               const currentTransfers = result.last_deadline_total_transfers;
+              const currentValue = result.last_deadline_value / 10;
 
                 this.setState({
                 teamName: teamName,
                 currentActual,
-                currentTransfers
+                currentTransfers,
+                currentValue
                  });
             },
           )
@@ -225,7 +241,7 @@ handleChange(event) {
   },
 
   render() {
-    const {error, isLoaded, items, coreData, player, score, playerArray, currentActual, currentTransfers, outfieldScore, teamId, teamName, currentWeek, subScore, highestScorer, highestScore, captain, captainScore, pointsComingOn, vicecaptScore} = this.state;
+    const {error, currentValue, whatifValue, isLoaded, items, coreData, player, score, playerArray, currentActual, currentTransfers, outfieldScore, teamId, teamName, currentWeek, subScore, highestScorer, highestScore, captain, captainScore, pointsComingOn, vicecaptScore} = this.state;
     if (error) {
       return <div>Error: {error.message}</div>;
     } else {
@@ -236,7 +252,7 @@ handleChange(event) {
         <div className="input-group-append">
           <button type="button"
             onClick={()=>{this.onButtonClick();}}
-            style={{cursor:'pointer'}}
+            style={{ cursor: 'pointer', backgroundColor: 'darkred', color: 'white', border: '0px', margin: '0 auto', height: '38px' }}
            className={'whatifButton btn btn-outline-secondary'}
            disabled={!teamId}
             > Calculate
@@ -345,6 +361,8 @@ handleChange(event) {
        {captain != highestScorer &&
        <p> If they had, their GW1 team would have {outfieldScore - (0.5 * captainScore) + highestScore} points!</p>
        }
+       <p>Your current team value is <strong>{currentValue}</strong>. If you'd made no transfers, your team value would be <strong>{whatifValue}</strong>.</p>
+
       <p>Your current actual points are <strong> {currentActual} </strong>, and you've made {currentTransfers} transfers. So your transfer activity and captaincy choices have been <strong> worth a total of {currentActual - outfieldScore} points!</strong>  </p>
 
       <p>Check out how you'd be doing in your Mini League if every player hadn't made a change since Gameweek 1 using our <strong><a href='https://www.game-change.co.uk/2020/01/23/fpl-what-if-minileague-machine/'>What-if Mini League Machine!</a></strong></p>

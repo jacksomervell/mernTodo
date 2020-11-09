@@ -29,7 +29,10 @@ export default class WhatIf extends Component {
       averageSubScore: '',
       pointsComingOn: '',
       currentActual: 0,
-      currentTransfers: 0
+      currentTransfers: 0,
+      currentValue: 0,
+      whatifValue: 0,
+      rank:0
     }
 
       }
@@ -40,7 +43,24 @@ export default class WhatIf extends Component {
               });
   }
 
+findRank(points, page) {
+  let link = 'https://ffwhatif.herokuapp.com/proxy.php?csurl=https://fantasy.premierleague.com/api/leagues-classic/314/standings/?page_standings=' + page;
+  fetch(link)
+  .then(res => res.json())
+  .then((result) => {
+    if(result.standings.results[0].total <= points){
+      let rank = result.standings.results[0].rank; 
+      return rank;
+    }
+    else {
+      page = page+1;
+      this.findRank(points, page);
+    }
+  });
+}
+
   componentDidMount() {
+    // this.findRank(510, 1);
     const url = 'https://ffwhatif.herokuapp.com/proxy.php';
     fetch(url+"?csurl=https://fantasy.premierleague.com/api/bootstrap-static/")
      .then(res => res.json())
@@ -108,7 +128,6 @@ export default class WhatIf extends Component {
       )
       .then(
         (result) => {
-
           var outScore = 0;
           var subScore = 0;
           var highestScore = 0;
@@ -117,8 +136,10 @@ export default class WhatIf extends Component {
           var totalMatchesMissed = 0;
           var scoreToAddFromSubs = 0;
 
+          let totalCost = 0;
+
 //get the total mmax mins played for the seaosn so far
-          var allMins = this.state.currentWeek * 90;
+          var allMins = (this.state.currentWeek) * 90;
 
           for (var i=0; i<11; i++){
             outScore = outScore + this.tempArray[i].total_points
@@ -157,6 +178,15 @@ export default class WhatIf extends Component {
             }
           }
 
+          //calc the overall team value
+          for (var i=0; i<15; i++){
+            let price = this.tempArray[i].now_cost / 10;
+            totalCost += price; 
+          }
+
+          totalCost =  Math.round(totalCost * 100) / 100;
+
+
 //calc the vice points to add
           for (var i=0; i<15; i++){
             if (this.tempArray[i].is_vice == true){
@@ -186,25 +216,26 @@ export default class WhatIf extends Component {
             averageSubScore: averageSubScore,
             pointsComingOn: scoreToAddFromSubs,
             vicecaptScore: Math.abs(vicePointsToAdd),
-            vicecapt: vicecapt
+            vicecapt: vicecapt,
+            whatifValue: totalCost
         })
        }
-      )
+      ) 
       .then(
         (result) => {
          fetch(url + "?csurl=https://fantasy.premierleague.com/api/entry/" + this.state.teamId +"/")
          .then(res => res.json())
           .then(
             (result) => {
-              console.log(result);
                 var teamName = result.player_first_name;
                 const currentActual = result.summary_overall_points;
                 const currentTransfers = result.last_deadline_total_transfers;
-
+                const currentValue = result.last_deadline_value / 10;
                 this.setState({
                 teamName: teamName,
                 currentActual,
-                currentTransfers
+                currentTransfers,
+                currentValue
                  });
             },
           )
@@ -213,7 +244,7 @@ export default class WhatIf extends Component {
   }
 
   render() {
-    const { error, isLoaded, items, coreData, player, score, currentActual, currentTransfers, playerArray, outfieldScore, teamId, teamName, currentWeek, subScore, highestScorer, highestScore, captain, captainScore, pointsComingOn, vicecaptScore} = this.state;
+    const { error, currentValue, whatifValue, isLoaded, items, coreData, player, score, currentActual, currentTransfers, playerArray, outfieldScore, teamId, teamName, currentWeek, subScore, highestScorer, highestScore, captain, captainScore, pointsComingOn, vicecaptScore} = this.state;
     if (error) {
       return <div>Error: {error.message}</div>;
     } else {
@@ -333,6 +364,7 @@ export default class WhatIf extends Component {
        {captain != highestScorer &&
        <p> If they had, their GW1 team would have {outfieldScore - (0.5 * captainScore) + highestScore} points!</p>
        }
+       <p>Your current team value is <strong>{currentValue}</strong>. If you'd made no transfers, your team value would be <strong>{whatifValue}</strong>.</p>
        <p>Your current actual points are <strong> {currentActual} </strong>, and you've made {currentTransfers} transfers. So your transfer activity and captaincy choices have been <strong> worth a total of {currentActual - outfieldScore} points!</strong>  </p>
       </div>
     }

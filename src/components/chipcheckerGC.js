@@ -1,18 +1,19 @@
-import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
-import axios from 'axios';
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.5.4/react.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.5.4/react-dom.min.js"></script>
+<script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
+Use this tool to get a quick overview of who has used which chips in your Mini League.
 
+Just enter your league ID (the number in the URL when you view your league on the official FPL site!) in the box below, and click 'Calculate'.
 
-export default class ChipChecker extends Component {
+Our other FPL Tools are <a href="https://www.game-change.co.uk/fpl-tools/">right here</a>.
 
-  constructor(props) {
-        super(props);
+The excellent book on mastering FPL, <a href="https://www.amazon.co.uk/gp/product/1787290166/ref=as_li_tl?ie=UTF8&amp;tag=gamechangecou-21&amp;camp=1634&amp;creative=6738&amp;linkCode=as2&amp;creativeASIN=1787290166&amp;linkId=39f86dd05dbca8fec11f46de1daeb93a"><strong><em>Wasting your Wildcard, </em>is available from Amazon here.</strong></a>
+<div id="root" style="width: 100%;"></div>
+<pre><script type="text/babel">
 
-        this.handleChange = this.handleChange.bind(this);
-
-
-
-    this.state =  {
+  var WhatIf = React.createClass({
+  getInitialState: function() {
+    return { 
       coreData: '',
       isLoading: false,
       items: '',
@@ -32,7 +33,7 @@ export default class ChipChecker extends Component {
     finalChips: [],
 
     };
-  }
+  },
 
 
 
@@ -40,11 +41,11 @@ export default class ChipChecker extends Component {
 
     this.setState({leagueId: event.target.value,
               });
-  }
+  },
 
   componentDidMount() {
 const url = 'https://ffwhatif.herokuapp.com/proxy.php';
-    fetch(url+"?csurl=https://fantasy.premierleague.com/api/bootstrap-static")
+    fetch(url+"?csurl=https://fantasy.premierleague.com/drf/bootstrap-static")
      .then(res => res.json())
      .then(
       (result) => {
@@ -54,7 +55,8 @@ const url = 'https://ffwhatif.herokuapp.com/proxy.php';
         currentWeek: currentWeek,
         })
       })
-  }
+  },
+
 
 sort_by_key(array, key)
 {
@@ -63,9 +65,7 @@ sort_by_key(array, key)
   var x = a[key]; var y = b[key];
   return ((x < y) ? 1 : ((x > y) ? -1 : 0));
  });
-}
-
-
+},
 
 
   onButtonClick() {
@@ -85,7 +85,8 @@ const url = 'https://ffwhatif.herokuapp.com/proxy.php';
         isLoading: true
       })
 
-    fetch("https://fierce-chamber-40748.herokuapp.com/todos/fish/" + this.state.leagueId)
+    fetch(url+"?csurl=https://fantasy.premierleague.com/api/leagues-classic/" + this.state.leagueId + "/standings/"
+    )
       .then(res => res.json())
       .then(
       response => {
@@ -139,8 +140,8 @@ const url = 'https://ffwhatif.herokuapp.com/proxy.php';
        }
       )
 
-
-  }
+      
+  },
 
   render() {
     const {
@@ -162,7 +163,7 @@ const url = 'https://ffwhatif.herokuapp.com/proxy.php';
               <div className="input-group-append">
                 <button type="button"
                 onClick={()=>{this.onButtonClick();}}
-                style={{cursor:'pointer'}}
+                style={{cursor:'pointer', backgroundColor:'darkred', color:'white', border:'0px', margin:'0 auto', height:'38px'}}
                 className={'whatifButton btn btn-outline-secondary'}
                 disabled={!leagueId}
                 > Calculate
@@ -240,7 +241,19 @@ const url = 'https://ffwhatif.herokuapp.com/proxy.php';
 
       );
     }
-  }
 
-
-  }
+}});
+ReactDOM.render(
+  <WhatIf />,
+  document.getElementById('root')
+);
+</script></pre>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-format="autorelaxed"
+     data-ad-client="ca-pub-1339622383803601"
+     data-ad-slot="1810839493"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>

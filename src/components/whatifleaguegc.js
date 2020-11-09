@@ -28,6 +28,7 @@ The excellent book on Mastering FPL, <a href="https://www.amazon.co.uk/gp/produc
     leagueId:'',
     arrayOfScores: [],
     leagueLength: 0,
+    loading: false
    }
  },
 
@@ -67,9 +68,13 @@ The excellent book on Mastering FPL, <a href="https://www.amazon.co.uk/gp/produc
     this.tempArray = [];
     this.leagueName = ''
     this.allScores = [];
+    this.setState({
+      loading: true
+    })
 
+    const url = 'https://ffwhatif.herokuapp.com/proxy.php';
 
-    fetch("https://fierce-chamber-40748.herokuapp.com/todos/fish/" + this.state.leagueId)
+    fetch(url+"?csurl=https://fantasy.premierleague.com/api/leagues-classic/" + this.state.leagueId + "/standings/")
       .then(res => res.json())
       .then(
         response => {
@@ -258,7 +263,7 @@ console.log(teamId, [outScore, scoreToAddFromSubs, vicePointsToAdd, totalMatches
             const currentActual = result.summary_overall_points;
             const currentTransfers = result.last_deadline_total_transfers;
             const difference = currentActual - outfieldscore;
-            this.setState({ arrayOfScores: [...this.state.arrayOfScores, { teamName, outfieldscore, currentActual, currentTransfers, difference }] })
+            this.setState({ loading: false, arrayOfScores: [...this.state.arrayOfScores, { teamName, outfieldscore, currentActual, currentTransfers, difference }] })
           },
         )
     }
@@ -266,7 +271,7 @@ console.log(teamId, [outScore, scoreToAddFromSubs, vicePointsToAdd, totalMatches
 },
 
   render() {
-    const {error, arrayOfScores, leagueLength} = this.state;
+    const {error, arrayOfScores, leagueLength, loading} = this.state;
     if (error) {
       return <div>Error: {error.message}</div>;
     } else {
@@ -283,6 +288,8 @@ console.log(teamId, [outScore, scoreToAddFromSubs, vicePointsToAdd, totalMatches
           </button>
         </div>
       </div>
+
+      { loading ? <div style={{width: '100%'}}><p style={{margin: '0 auto', textAlign: 'center'}}>Loading...</p></div> : <span></span>}
 
       {arrayOfScores.length > 1 && arrayOfScores.length >= leagueLength &&
 
@@ -328,3 +335,14 @@ ReactDOM.render(
   );
 
 </script></pre>
+
+</script></pre>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-format="autorelaxed"
+     data-ad-client="ca-pub-1339622383803601"
+     data-ad-slot="1810839493"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>

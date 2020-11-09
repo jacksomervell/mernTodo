@@ -1,16 +1,23 @@
- import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
-import axios from 'axios';
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.5.4/react.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.5.4/react-dom.min.js"></script>
+<script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
 
-export default class PercTable extends Component {
+Use this tool to get an overview of the overall player ownership in your Mini-League.
 
-  constructor(props) {
-        super(props);
+It shows every single player owned in your league, and what percentage of managers in your league own that player.
 
-        this.handleChange = this.handleChange.bind(this);
+Just enter your league ID (the number in the URL when you view your league on the official FPL site!) in the box below, and click 'Calculate'.
 
-        this.state = {
-          coreData:'',
+Other FPL Tools <a href="https://www.game-change.co.uk/fpl-tools/">right here</a>.
+
+The excellent book on Mastering FPL from Amazon, <a href="https://www.amazon.co.uk/gp/product/1787290166/ref=as_li_tl?ie=UTF8&amp;tag=gamechangecou-21&amp;camp=1634&amp;creative=6738&amp;linkCode=as2&amp;creativeASIN=1787290166&amp;linkId=39f86dd05dbca8fec11f46de1daeb93a"><strong><em>Wasting your Wildcard, </em>is available from Amazon here.</strong></a>
+<div id="root" style="width: 100%;"></div>
+<pre><script type="text/babel">
+
+  var WhatIf = React.createClass({
+  getInitialState: function() {
+    return { 
+      coreData:'',
           isLoaded: false,
           items: '',
           leagueId: '',
@@ -18,9 +25,8 @@ export default class PercTable extends Component {
           playerArray: [],
           currentWeek: '',
           leagueName: ''
-    }
-
-   }
+    };
+  },
 
 
 
@@ -28,7 +34,7 @@ export default class PercTable extends Component {
 
     this.setState({leagueId: event.target.value,
               });
-  }
+  },
 
   componentDidMount() {
 const url = 'https://ffwhatif.herokuapp.com/proxy.php';
@@ -48,11 +54,13 @@ const url = 'https://ffwhatif.herokuapp.com/proxy.php';
         currentWeek: currentWeek,
         })
       })
-  }
+  },
+
+
 
 
   onButtonClick() {
-    let varItems = '';
+let varItems = '';
     this.tempArray = [];
     let picks = '';
     this.tempPlayerArray = [];
@@ -132,8 +140,8 @@ const url = 'https://ffwhatif.herokuapp.com/proxy.php';
        },
       )
 
-
-  }
+      
+  },
 
   render() {
     const {
@@ -156,7 +164,7 @@ const url = 'https://ffwhatif.herokuapp.com/proxy.php';
         <div className="input-group-append">
           <button type="button"
               onClick={()=>{this.onButtonClick();}}
-              style={{cursor:'pointer'}}
+              style={{cursor:'pointer', backgroundColor:'darkred', color:'white', border:'0px', margin:'0 auto', height:'38px'}}
               className='whatifButton btn btn-outline-secondary'
               disabled={!leagueId}
             > Calculate</button>
@@ -196,4 +204,18 @@ const url = 'https://ffwhatif.herokuapp.com/proxy.php';
     }
   }
 
-}
+});
+ReactDOM.render(
+  <WhatIf />,
+  document.getElementById('root')
+);
+</script></pre>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-format="autorelaxed"
+     data-ad-client="ca-pub-1339622383803601"
+     data-ad-slot="1810839493"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>

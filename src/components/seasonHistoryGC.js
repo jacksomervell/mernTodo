@@ -32,6 +32,7 @@ export default class SeasonHistory extends Component {
         {"season_name":'2016/17', "population":4503345},
         {"season_name":'2017/18', "population":5190135},
         {"season_name":'2018/19', "population":7383187},
+        {"season_name":'2019/20', "population":7628968}
       ],
       finalData:{},
       averageAverage: 0,
