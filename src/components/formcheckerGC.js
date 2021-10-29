@@ -2,21 +2,16 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.5.4/react-dom.min.js"></script>
 <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
 
-Do you play the Official Premier League Fantasy Football game?
-
-If so, you've probably spent hours reading all<strong><span style="color: #0000ff;"> <a style="color: #0000ff;" href="https://www.amazon.com/gp/product/1787290166/ref=as_li_tl?ie=UTF8&amp;tag=gamechangecou-20&amp;camp=1789&amp;creative=9325&amp;linkCode=as2&amp;creativeASIN=1787290166&amp;linkId=e0fe3bd29ddaa06086a1eefe389c264b">the books</a></span></strong>, pouring over stats and watching highlight after highlight while you decide what moves to make.
-
+Use this FPL Tool to see how your selections have fared over the past four gameweeks, and see who's on the up, and who is on the wane.
 <!--more-->
 
-But have you ever wondered how many points you'd have if you had <strong>never made a transfer or changed your captain?</strong>
+The FPL Form Checker shows how many points each of your players have scored during the previous 4 gameweeks, their average points per game during that time, and their season PPG average - comparing the two should show you whether they're worth captaining, or if it's time to ship them out. The darker the shade of red, the more in-form the player is!
 
-Are those hours spent agonizing over transfer and lineup choices worth it?  Should you have just set and forget from the beginning?
-
-Enter your team ID in the field below to find out how many points you'd have if you'd just left it all alone...
+Enter your team ID in the field below (the number in the URL when you click on the 'Points' tab on the main FPL site).
 
 You might also enjoy our other <strong><a href="https://www.game-change.co.uk/fpl-tools/">FPL Tools</a></strong>, which give similar insights into your season.
 
-The excellent book on Mastering FPL from Amazon, <a href="https://www.amazon.co.uk/gp/product/1787290166/ref=as_li_tl?ie=UTF8&amp;tag=gamechangecou-21&amp;camp=1634&amp;creative=6738&amp;linkCode=as2&amp;creativeASIN=1787290166&amp;linkId=39f86dd05dbca8fec11f46de1daeb93a"><strong><em>Wasting your Wildcard, </em>is available from Amazon here.</strong></a>
+The excellent book on Mastering FPL from Amazon, <a href="https://www.amazon.co.uk/gp/product/1787290166/ref=as_li_tl?ie=UTF8&amp;tag=gamechangecou-21&amp;camp=1634&amp;creative=6738&amp;linkCode=as2&amp;creativeASIN=1787290166&amp;linkId=39f86dd05dbca8fec11f46de1daeb93a"><strong><em>Wasting your Wildcard,</em> is available from Amazon here.</strong></a>
 <div id="root" style="width: 100%;"></div>
 <pre><script type="text/babel">
 
@@ -121,16 +116,45 @@ var WhatIf = React.createClass({
 
                             let fourWeekScore = lastweek + twoweek +threeweek + fourweek;
 
-                            console.log(tempArray);
+                            const colorScores = [
+                            '#ff0000',
+                            '#ff3232',
+                            '#ff6464',
+                            '#ff9696',
+                            '#ffc8c8',
+                            '#ffffff',
+                            ];
+
+                            let ppgLast4 = fourWeekScore / 4;
+                            let color = '#ffffff';
+
+                            if (ppgLast4 < 1) {
+                              color = colorScores[5];
+                            } else if (ppgLast4 < 2) {
+                              color = colorScores[4];
+                            } else if (ppgLast4 < 4) {
+                              color = colorScores[3];
+                            } else if (ppgLast4 < 5) {
+                              color = colorScores[2];
+                            } else if (ppgLast4 < 6) {
+                              color = colorScores[1];
+                            } else {
+                              color = colorScores[0];
+                            }
+
+
+
+                          
 
                             let playerObject = {
                                 'Id': player[0].element,
-                                'Name': tempArray.first_name + ' ' + tempArray.second_name,
+                                'Name': tempArray.second_name,
                                 'FourWeekScore': fourWeekScore,
                                 'Ownership': tempArray.selected_by_percent,
                                 'TotalPpg': tempArray.points_per_game,
-                                'PpgLast4': fourWeekScore / 4,
-                                'Position' : tempArray.element_type
+                                'PpgLast4': ppgLast4,
+                                'Position' : tempArray.element_type,
+                                'Color' : color
                             }
 
                             this.finalArray.push(playerObject);
@@ -198,11 +222,10 @@ var WhatIf = React.createClass({
       <div>
 
 <div className={"playerbar"}>
-
 {playerArray.map(item => {
 
-if(item.Position == 1 && playerArray.indexOf(item) < 11){
-   return <div key={item.Id} className={"starter"} style={{backgroundColor:'green', color:'white'}}>
+if(item.Position == 1){
+   return <div key={item.Id} className={"starter"} style={{backgroundColor:item.Color, color:'black'}}>
    <span className="pointSpan"><strong>{item.Name}</strong></span>
    <span className="pointSpan">Past 4 weeks: <strong>{item.FourWeekScore}pts</strong></span>
    <span className="pointSpan">Ownership: <strong>{item.Ownership}%</strong></span>
@@ -219,8 +242,8 @@ if(item.Position == 1 && playerArray.indexOf(item) < 11){
 
 {playerArray.map(item => {
 
-if(item.Position == 2 && playerArray.indexOf(item) < 11){
-    return <div key={item.Id} className={"starter"} style={{backgroundColor:'lightBlue', color:'black'}}>
+if(item.Position == 2){
+    return <div key={item.Id} className={"starter"} style={{backgroundColor:item.Color, color:'black'}}>
     <span className="pointSpan"><strong>{item.Name}</strong></span>
     <span className="pointSpan">Past 4 weeks: <strong>{item.FourWeekScore}pts</strong></span>
     <span className="pointSpan">Ownership: <strong>{item.Ownership}%</strong></span>
@@ -238,8 +261,8 @@ if(item.Position == 2 && playerArray.indexOf(item) < 11){
 
 {playerArray.map(item => {
 
-if(item.Position == 3 && playerArray.indexOf(item) < 11){
-    return <div key={item.Id} className={"starter"} style={{backgroundColor:'red', color:'white'}}>
+if(item.Position == 3){
+    return <div key={item.Id} className={"starter"} style={{backgroundColor:item.Color, color:'black'}}>
     <span className="pointSpan"><strong>{item.Name}</strong></span>
     <span className="pointSpan">Past 4 weeks: <strong>{item.FourWeekScore}pts</strong></span>
     <span className="pointSpan">Ownership: <strong>{item.Ownership}%</strong></span>
@@ -257,26 +280,8 @@ if(item.Position == 3 && playerArray.indexOf(item) < 11){
 
 {playerArray.map(item => {
 
-if(item.Position == 4 && playerArray.indexOf(item) < 11){
-    return <div key={item.Id} className={"starter"} style={{backgroundColor:'yellow', color:'black'}}>
-       <span className="pointSpan"><strong>{item.Name}</strong></span>
-       <span className="pointSpan">Past 4 weeks: <strong>{item.FourWeekScore}pts</strong></span>
-       <span className="pointSpan">Ownership: <strong>{item.Ownership}%</strong></span>
-       <span className="pointSpan">PPG last 4: <strong>{item.PpgLast4}pts</strong></span>
-       <span className="pointSpan">Total PPG: <strong>{item.TotalPpg}pts</strong></span>
-     </div>
-   }
-
-})}
-
-</div>
-
-<div className={"subbar"}>
-
-{playerArray.map(item => {
-
-if(playerArray.indexOf(item) >= 11){
-    return <div key={item.Id} className={"starter"} style={{backgroundColor:'lightGrey', color:'black'}}>
+if(item.Position == 4){
+    return <div key={item.Id} className={"starter"} style={{backgroundColor:item.Color, color:'black'}}>
        <span className="pointSpan"><strong>{item.Name}</strong></span>
        <span className="pointSpan">Past 4 weeks: <strong>{item.FourWeekScore}pts</strong></span>
        <span className="pointSpan">Ownership: <strong>{item.Ownership}%</strong></span>

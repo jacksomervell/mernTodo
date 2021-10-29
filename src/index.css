@@ -5,7 +5,7 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background: #5cdb95
+  background: white;
 }
 
 code {
@@ -24,36 +24,69 @@ h2, p, a {
 }
 
 .fplNav {
-  background: #05386B;
+  background: white;
+  color: #05386B;
+  border-bottom: 2px solid black;
 }
 
 .navbar-dark .navbar-nav .nav-link {
-  color: white;
+  color:black;
 }
+.navbar-dark .navbar-nav .nav-link:hover {
+  color:black;
+}
+
+.navbar-dark .navbar-brand {
+  color: black;
+}
+
+.navbar-dark .navbar-brand:hover {
+  color: black;
+}
+
 
 .toolLink {
-  color:#05386B;
-  width:100%;
-  margin: 0px;
-  margin-top: 18px;
-  transition: all 0.5s;
-    -moz-transition: all 0.2s linear; /* Firefox 4 */
-    -webkit-transition: box-shadow 0.5s ease-out; /* Safari and Chrome */
-    -o-transition: all 0.2s linear; /* Opera */
-    -ms-transition: all 0.5s linear; /* Explorer 10 */
+  color:black;
+  text-decoration: none;
+  letter-spacing: 0.15em;
+  
+  display: inline-block;
+  padding: 15px 20px;
+  position: relative;
+}
+.toolLink:after {    
+  background: none repeat scroll 0 0 transparent;
+  bottom: 0;
+  content: "";
+  display: block;
+  height: 2px;
+  left: 30px;
+  position: absolute;
+  background: black;
+  transition: width 0.3s ease 0s, left 0.3s ease 0s;
+  width: 0;
+}
+.toolLink:hover:after { 
+  width: 50%; 
+  left: 30px; 
+}
+@media screen and (max-height: 300px) {
+	ul {
+		margin-top: 40px;
+	}
 }
 
-.toolLink:hover {
-  color:white;
-  box-shadow: inset 3000px 0 0 0 #379683;
-}
 
 .toolLink:link {
   text-decoration:none;
 }
+.toolLink:hover {
+  text-decoration:none;
+  color: black;
+}
 
 .container {
-  background: #5cdb95;
+  background: white;
   padding:0;
   height: 100vh;
 }

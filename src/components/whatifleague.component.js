@@ -60,7 +60,9 @@ export default class WhatIfLeague extends Component {
       loading: true
     })
 
-    fetch("https://fierce-chamber-40748.herokuapp.com/todos/fish/" + this.state.leagueId)
+    const url = 'https://ffwhatif.herokuapp.com/proxy.php';
+
+    fetch(url+"?csurl=https://fantasy.premierleague.com/api/leagues-classic/" + this.state.leagueId + "/standings/")
       .then(res => res.json())
       .then(
         response => {
@@ -94,6 +96,12 @@ export default class WhatIfLeague extends Component {
     this.setState({ data })
   }
 
+getBiggest(bit, array){
+  var res = Math.max.apply(Math,array.map(function(o){return o.bit;}))
+  var obj = array.find(function(o){ return o.bit == res; })
+  return obj;
+}
+
   whatIfForTeam = (teamId) => {
 
     let playerName = '';
@@ -121,8 +129,6 @@ export default class WhatIfLeague extends Component {
 
         for (var i=0; i<15; i++){
           tempArray.push(this.state.coreData.find(theplayer => theplayer.id === varItems.picks[i].element))
-          console.log(tempArray[i].total_points);
-
 
           if(tempArray[i].is_cap == true){
             tempArray[i].total_points = 0.5 * tempArray[i].total_points;
@@ -139,7 +145,8 @@ export default class WhatIfLeague extends Component {
 //vice stuff here
 
             if(varItems.picks[i].is_vice_captain == true && tempArray[i].is_vice != true){
-            tempArray[i].is_vice = true
+            tempArray[i].is_vice = true;
+            console.log([teamId, varItems.picks[i]]);
             vicecapt = tempArray[i].web_name;
             vicecaptScore = tempArray[i].total_points;
             }
@@ -164,7 +171,6 @@ export default class WhatIfLeague extends Component {
           if(tempArray.length < 1){
             return;
           }
-          console.log(tempArray);
           for (var i=0; i<11; i++){
 
             if(isNaN(tempArray[i].total_points)){
@@ -172,7 +178,6 @@ export default class WhatIfLeague extends Component {
             } else {
             outScore = outScore + tempArray[i].total_points
             }
-            console.log(outScore);
           //calc how many matches theyve missed
             var minsPlayed = tempArray[i].minutes;
             var minsMissed = allMins - minsPlayed;
@@ -199,6 +204,9 @@ export default class WhatIfLeague extends Component {
             if (tempArray[i].total_points * 0.5 > highestScore && tempArray[i].is_cap == true){
               highestScore = tempArray[i].total_points * 0.5;
               highestScorer = tempArray[i].web_name;
+            }
+
+            if(tempArray[i].is_cap == true){
 //how many matches did the captian miss?
               var minsPlayed = tempArray[i].minutes;
               var minsMissed = allMins - minsPlayed;
@@ -218,7 +226,6 @@ export default class WhatIfLeague extends Component {
 
           vicePointsToAdd = parseFloat(vicePointsToAdd.toFixed());
 
-
           averageSubScore = (subScore/4)/this.state.currentWeek;
 
           scoreToAddFromSubs = totalMatchesMissed * averageSubScore;
@@ -227,7 +234,7 @@ export default class WhatIfLeague extends Component {
 
           outfieldscore = outScore + scoreToAddFromSubs + vicePointsToAdd;
 
-          console.log(teamId, [outScore, scoreToAddFromSubs, vicePointsToAdd, totalMatchesMissed, averageSubScore]);
+         // console.log([teamId, scoreToAddFromSubs, outScore, vicePointsToAdd])
 
        }
       )
@@ -242,7 +249,12 @@ export default class WhatIfLeague extends Component {
               const currentTransfers = result.last_deadline_total_transfers;
               const difference = currentActual - outfieldscore;
               this.setState({ loading: false, arrayOfScores: [...this.state.arrayOfScores, { teamName, outfieldscore, currentActual, currentTransfers, difference }] })
-            },
+            }
+          ).then(
+            (result) => {
+              if(this.state.arrayOfScores.length == this.state.leagueLength){
+              }
+            }
           )
         }
       )
@@ -275,10 +287,10 @@ export default class WhatIfLeague extends Component {
               <tr>
                 <th>Rank</th>
                 <th>Manager</th>
-                <th onClick={e => this.onSort(e, 'outfieldscore')} style={{cursor:'pointer', 'box-shadow':'inset 0 -3px 0 0 green'}}>What-if Score</th>
-                <th onClick={e => this.onSort(e, 'currentActual')} style={{cursor:'pointer', 'box-shadow':'inset 0 -3px 0 0 green'}}>Actual Score</th>
-                <th onClick={e => this.onSort(e, 'difference')} style={{cursor:'pointer', 'box-shadow':'inset 0 -3px 0 0 green'}}>Difference</th>
-                <th onClick={e => this.onSort(e, 'currentTransfers')} style={{ cursor: 'pointer', 'box-shadow': 'inset 0 -3px 0 0 green' }}>Transfers made</th>
+                <th onClick={e => this.onSort(e, 'outfieldscore')} style={{cursor:'pointer', 'boxShadow':'inset 0 -3px 0 0 green'}}>What-if Score</th>
+                <th onClick={e => this.onSort(e, 'currentActual')} style={{cursor:'pointer', 'boxShadow':'inset 0 -3px 0 0 green'}}>Actual Score</th>
+                <th onClick={e => this.onSort(e, 'difference')} style={{cursor:'pointer', 'boxShadow':'inset 0 -3px 0 0 green'}}>Difference</th>
+                <th onClick={e => this.onSort(e, 'currentTransfers')} style={{ cursor: 'pointer', 'boxShadow': 'inset 0 -3px 0 0 green' }}>Transfers made</th>
                 <th>Detail</th>
               </tr>
             </thead>

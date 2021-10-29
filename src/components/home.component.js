@@ -22,17 +22,17 @@ export default class ToolsList extends Component {
 
   componentDidMount() {
     const setTools = [{
-        title: 'What-if Machine',
+        title: 'WHAT-IF MACHINE',
         description: 'A cruel tool that calculates how many points your team would have if you’d never made a transfer, captaincy change or change of any kind at all since Gameweek 1. Approach with caution!',
         url: '/whatif'
         },
         {
-        title: 'Mini-League Player Ownership',
+        title: 'MINI-LEAGUE PLAYER OWNERSHIP',
         description: 'See which players are most and least-owned in your mini-league.',
         url: '/percentages'
         },
         {
-        title: 'Chip Checker',
+        title: 'CHIP CHECKER',
         description: 'See who has used which chips in your mini-league, and how you compare.',
         url: '/chip-checker'
         },

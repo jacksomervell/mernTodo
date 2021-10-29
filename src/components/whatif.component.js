@@ -32,8 +32,9 @@ export default class WhatIf extends Component {
       currentTransfers: 0,
       currentValue: 0,
       whatifValue: 0,
-      rank:0
-    }
+      currentRank:0,
+      whatIfRank:0,
+        }
 
       }
 
@@ -42,22 +43,6 @@ export default class WhatIf extends Component {
     this.setState({teamId: event.target.value,
               });
   }
-
-findRank(points, page) {
-  let link = 'https://ffwhatif.herokuapp.com/proxy.php?csurl=https://fantasy.premierleague.com/api/leagues-classic/314/standings/?page_standings=' + page;
-  fetch(link)
-  .then(res => res.json())
-  .then((result) => {
-    if(result.standings.results[0].total <= points){
-      let rank = result.standings.results[0].rank; 
-      return rank;
-    }
-    else {
-      page = page+1;
-      this.findRank(points, page);
-    }
-  });
-}
 
   componentDidMount() {
     // this.findRank(510, 1);
@@ -93,6 +78,8 @@ findRank(points, page) {
     var captScore = '';
     var vicecapt = '';
     var vicecaptScore = '';
+    var leaguePositionArray = [];
+
 
     const url = 'https://ffwhatif.herokuapp.com/proxy.php';
 
@@ -170,6 +157,10 @@ findRank(points, page) {
             if (this.tempArray[i].total_points * 0.5 > highestScore && this.tempArray[i].is_cap == true){
               highestScore = this.tempArray[i].total_points * 0.5;
               highestScorer = this.tempArray[i].web_name;
+
+            }
+
+            if(this.tempArray[i].is_cap == true){
 //how many matches did the captian miss?
               var minsPlayed = this.tempArray[i].minutes;
               var minsMissed = allMins - minsPlayed;
@@ -198,13 +189,16 @@ findRank(points, page) {
 
           vicePointsToAdd = parseFloat(vicePointsToAdd.toFixed());
 
-
           averageSubScore = (subScore/4)/this.state.currentWeek;
 
           scoreToAddFromSubs = totalMatchesMissed * averageSubScore;
 
           scoreToAddFromSubs = Math.abs(parseFloat(scoreToAddFromSubs.toFixed()));
 
+          //leaguePosition calc 
+         const leaguePosition = 1;
+         let positionScores = [];
+          
           this.setState({
             playerArray: this.tempArray,
             outfieldScore: outScore + scoreToAddFromSubs + vicePointsToAdd,
@@ -231,20 +225,65 @@ findRank(points, page) {
                 const currentActual = result.summary_overall_points;
                 const currentTransfers = result.last_deadline_total_transfers;
                 const currentValue = result.last_deadline_value / 10;
+                const currentRank = result.summary_overall_rank.toLocaleString();
+
                 this.setState({
                 teamName: teamName,
                 currentActual,
                 currentTransfers,
-                currentValue
+                currentValue,
+                currentRank
                  });
             },
           )
         }
       )
+      .then( response => {
+        let leagueCounter = 1;
+        for(var i=1; i<162; i++){ fetch(url+"?csurl=https://fantasy.premierleague.com/api/leagues-classic/314/standings/?page_standings=" +(i*1000)) .then(res=>res.json())
+            .then(
+              response => {
+                let rank = response.standings.results[0].rank;
+                let points = response.standings.results[0].total;
+                
+                leaguePositionArray[rank] = points;
+                leagueCounter++;
+              }
+            ).then(
+              response => {
+                 if(leagueCounter === 161) {
+
+                  let outfield = this.state.outfieldScore
+
+                  function arraySearch(arr,val) {
+                  let b = 1;
+                  let counter = 0
+                  for(b=val; b<val*10; b++){
+                    for (var i=0; i<arr.length; i++)
+                        if (arr[i] === b){                   
+                            return i + counter;
+                        }
+                        counter+=100;
+                   }
+                    return false;
+                  }
+
+                   var whatIfRank = arraySearch(leaguePositionArray, outfield).toLocaleString();
+
+                  this.setState({
+                    whatIfRank
+                  })
+               }
+            }
+
+            )
+       }
+      }
+      )
   }
 
   render() {
-    const { error, currentValue, whatifValue, isLoaded, items, coreData, player, score, currentActual, currentTransfers, playerArray, outfieldScore, teamId, teamName, currentWeek, subScore, highestScorer, highestScore, captain, captainScore, pointsComingOn, vicecaptScore} = this.state;
+    const { currentRank, whatIfRank, error, currentValue, whatifValue, isLoaded, items, coreData, player, score, currentActual, currentTransfers, playerArray, outfieldScore, teamId, teamName, currentWeek, subScore, highestScorer, highestScore, captain, captainScore, pointsComingOn, vicecaptScore} = this.state;
     if (error) {
       return <div>Error: {error.message}</div>;
     } else {
@@ -366,6 +405,7 @@ findRank(points, page) {
        }
        <p>Your current team value is <strong>{currentValue}</strong>. If you'd made no transfers, your team value would be <strong>{whatifValue}</strong>.</p>
        <p>Your current actual points are <strong> {currentActual} </strong>, and you've made {currentTransfers} transfers. So your transfer activity and captaincy choices have been <strong> worth a total of {currentActual - outfieldScore} points!</strong>  </p>
+      <p>Your current rank is <strong>{currentRank} </strong>. Your what-if rank would be <strong>{whatIfRank}</strong>.</p>
       </div>
     }
       </div>

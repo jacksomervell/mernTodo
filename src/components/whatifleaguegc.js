@@ -4,17 +4,17 @@
 
 Die - hard FPL fan ?
 
-  If so, you've probably spent hours reading all <strong><a style="color: #0000ff;" href="https://www.amazon.co.uk/gp/product/B07VVY3JZM?ie=UTF8&tag=gamechangecou-21&camp=1634&linkCode=xm2&creativeASIN=B07VVY3JZM">the books</a></strong>, pouring over stats and watching highlight after highlight while you decide what moves to make.
+If so, you've probably spent hours reading all <strong><a href="https://amzn.to/3tQoqyY">the books</a></strong>, pouring over stats and watching highlight after highlight while you decide what moves to make.
 
-Well, this tool allows you to see how your Mini League would look < strong >if nobody in the league had made a transfer since Gameweek 1!</strong > See where you would rank if everyone had just left things alone...
+Well, this tool allows you to see how your Mini League would look <strong>if nobody in the league had made a transfer since Gameweek 1!</strong> See where you would rank if everyone had just left things alone...
 
 For a more detailed look at your own team's What-if result, check out our original and popular <strong><a href="https://www.game-change.co.uk/2017/08/28/fantasy-football-what-if-machine/">What-if Machine here</a></strong>, which provides a detailed look at your team, player-by-player.
 
-You might also enjoy our other < strong > <a href="https://www.game-change.co.uk/fpl-tools/">FPL Tools</a></strong >, which give similar insights into your season.
+You might also enjoy our other <strong><a href="https://www.game-change.co.uk/fpl-tools/">FPL Tools</a></strong>, which give similar insights into your season.
 
-The excellent book on Mastering FPL, <a href="https://www.amazon.co.uk/gp/product/B07VVY3JZM?ie=UTF8&tag=gamechangecou-21&camp=1634&linkCode=xm2&creativeASIN=B07VVY3JZM"><strong><em>Wasting your Wildcard, </em>is available from Amazon here.</strong></a>
+The excellent book on mastering FPL, <a href="https://www.amazon.co.uk/gp/product/B07VVY3JZM?ie=UTF8&tag=gamechangecou-21&camp=1634&linkCode=xm2&creativeASIN=B07VVY3JZM"><strong><em> Fantasy Premier League: Unlocking The Secrets To A Top 1% Finish, </em>is available from Amazon here.</strong></a>
 
-  <strong>Just put your League ID (it's in the URL when you view your league on the FPL site) into the box below, click 'Calculate' and you're good to go!</strong>
+Just put your <strong>League ID</strong> (it's in the URL when you view your league on the FPL site) into the box below, click 'Calculate' and you're good to go!
 
   <div id="root" style="width: 100%;"></div>
   <pre><script type="text/babel">
@@ -221,6 +221,10 @@ The excellent book on Mastering FPL, <a href="https://www.amazon.co.uk/gp/produc
             if (tempArray[i].total_points * 0.5 > highestScore && tempArray[i].is_cap == true){
       highestScore = tempArray[i].total_points * 0.5;
     highestScorer = tempArray[i].web_name;
+
+  }
+
+  if(tempArray[i].is_cap == true){
 //how many matches did the captian miss?
     var minsPlayed = tempArray[i].minutes;
     var minsMissed = allMins - minsPlayed;

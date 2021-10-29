@@ -1,23 +1,13 @@
-<script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.5.4/react.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.5.4/react-dom.min.js"></script>
-<script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
-
-Do you play the Official Premier League Fantasy Football game?
-
-If so, you've probably spent hours reading all<strong><span style="color: #0000ff;"> <a style="color: #0000ff;" href="https://www.amazon.com/gp/product/1787290166/ref=as_li_tl?ie=UTF8&amp;tag=gamechangecou-20&amp;camp=1789&amp;creative=9325&amp;linkCode=as2&amp;creativeASIN=1787290166&amp;linkId=e0fe3bd29ddaa06086a1eefe389c264b">the books</a></span></strong>, pouring over stats and watching highlight after highlight while you decide what moves to make.
-
-<!--more-->
-
-But have you ever wondered how many points you'd have if you had <strong>never made a transfer or changed your captain?</strong>
-
-Are those hours spent agonizing over transfer and lineup choices worth it?  Should you have just set and forget from the beginning?
-
-Enter your team ID in the field below to find out how many points you'd have if you'd just left it all alone...
-
-You might also enjoy our other <strong><a href="https://www.game-change.co.uk/fpl-tools/">FPL Tools</a></strong>, which give similar insights into your season.
-
-The excellent book on Mastering FPL from Amazon, <a href="https://www.amazon.co.uk/gp/product/1787290166/ref=as_li_tl?ie=UTF8&amp;tag=gamechangecou-21&amp;camp=1634&amp;creative=6738&amp;linkCode=as2&amp;creativeASIN=1787290166&amp;linkId=39f86dd05dbca8fec11f46de1daeb93a"><strong><em>Wasting your Wildcard, </em>is available from Amazon here.</strong></a>
-<div id="root" style="width: 100%;"></div>
+<p><script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.5.4/react.min.js"></script><br /><script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.5.4/react-dom.min.js"></script><br /><script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script></p>
+<p>Do you play the Official Premier League Fantasy Football game?</p>
+<p>If so, you've probably spent hours reading all <strong><a href="https://amzn.to/3tQoqyY">the books</a></strong>, pouring over stats and watching highlight after highlight while you decide what moves to make.</p>
+<p><!--more--></p>
+<p>But have you ever wondered how many points you'd have if you had <strong>never made a transfer or changed your captain?</strong></p>
+<p>Are those hours spent agonizing over transfer and lineup choices worth it?  Should you have just set and forget from the beginning?</p>
+<p>Enter your team ID in the field below to find out how many points you'd have if you'd just left it all alone...</p>
+<p>You might also enjoy our other <strong><a href="https://www.game-change.co.uk/fpl-tools/">FPL Tools</a></strong>, which give similar insights into your season.</p>
+<p>The excellent book on mastering FPL, <a href="https://amzn.to/3tQoqyY"><strong><em>Fantasy Premier League: Unlocking The Secrets To A Top 1% Finish, </em>is available from Amazon here.</strong></a></p>
+<div id="root" style="width: 100%;"> </div>
 <pre><script type="text/babel">
 
   var WhatIf = React.createClass({
@@ -43,7 +33,9 @@ The excellent book on Mastering FPL from Amazon, <a href="https://www.amazon.co.
       currentActual: 0,
       currentTransfers: 0,
       currentValue: 0,
-      whatifValue: 0
+      whatifValue: 0,
+      whatIfRank:0,
+      currentRank:0
     };
   },
 
@@ -86,6 +78,7 @@ handleChange(event) {
     var captScore = '';
     var vicecapt = '';
     var vicecaptScore = '';
+    var leaguePositionArray=[];
 
     const url = 'https://ffwhatif.herokuapp.com/proxy.php';
 
@@ -168,6 +161,8 @@ handleChange(event) {
             if (this.tempArray[i].total_points * 0.5 > highestScore && this.tempArray[i].is_cap == true){
               highestScore = this.tempArray[i].total_points * 0.5;
               highestScorer = this.tempArray[i].web_name;
+            }
+            if(this.tempArray[i].is_cap == true){
 //how many matches did the captian miss?
               var minsPlayed = this.tempArray[i].minutes;
               var minsMissed = allMins - minsPlayed;
@@ -227,21 +222,64 @@ handleChange(event) {
               const currentActual = result.summary_overall_points;
               const currentTransfers = result.last_deadline_total_transfers;
               const currentValue = result.last_deadline_value / 10;
+              const currentRank = result.summary_overall_rank.toLocaleString();
 
                 this.setState({
                 teamName: teamName,
                 currentActual,
                 currentTransfers,
-                currentValue
+                currentValue,
+                currentRank
                  });
             },
           )
         }
+      ).then( response => {
+        let leagueCounter = 1;
+        for(var i=1; i<162; i++){ fetch(url+"?csurl=https://fantasy.premierleague.com/api/leagues-classic/314/standings/?page_standings=" +(i*1000)) .then(res=>res.json())
+            .then(
+              response => {
+                let rank = response.standings.results[0].rank;
+                let points = response.standings.results[0].total;
+                
+                leaguePositionArray[rank] = points;
+                leagueCounter++;
+              }
+            ).then(
+              response => {
+                 if(leagueCounter === 161) {
+
+                  let outfield = this.state.outfieldScore
+
+                  function arraySearch(arr,val) {
+                  let b = 1;
+                  let counter = 0
+                  for(b=val; b<val*10; b++){
+                    for (var i=0; i<arr.length; i++)
+                        if (arr[i] === b){                   
+                            return i + counter;
+                        }
+                        counter+=100;
+                   }
+                    return false;
+                  }
+
+                   var whatIfRank = arraySearch(leaguePositionArray, outfield).toLocaleString();
+
+                  this.setState({
+                    whatIfRank
+                  })
+               }
+            }
+
+            )
+       }
+      }
       )
   },
 
   render() {
-    const {error, currentValue, whatifValue, isLoaded, items, coreData, player, score, playerArray, currentActual, currentTransfers, outfieldScore, teamId, teamName, currentWeek, subScore, highestScorer, highestScore, captain, captainScore, pointsComingOn, vicecaptScore} = this.state;
+    const {whatIfRank, currentRank, error, currentValue, whatifValue, isLoaded, items, coreData, player, score, playerArray, currentActual, currentTransfers, outfieldScore, teamId, teamName, currentWeek, subScore, highestScorer, highestScore, captain, captainScore, pointsComingOn, vicecaptScore} = this.state;
     if (error) {
       return <div>Error: {error.message}</div>;
     } else {
@@ -364,8 +402,13 @@ handleChange(event) {
        <p>Your current team value is <strong>{currentValue}</strong>. If you'd made no transfers, your team value would be <strong>{whatifValue}</strong>.</p>
 
       <p>Your current actual points are <strong> {currentActual} </strong>, and you've made {currentTransfers} transfers. So your transfer activity and captaincy choices have been <strong> worth a total of {currentActual - outfieldScore} points!</strong>  </p>
-
+       
       <p>Check out how you'd be doing in your Mini League if every player hadn't made a change since Gameweek 1 using our <strong><a href='https://www.game-change.co.uk/2020/01/23/fpl-what-if-minileague-machine/'>What-if Mini League Machine!</a></strong></p>
+      <p>Your current rank is <strong>{currentRank} </strong>. Your what-if rank would be <strong>{whatIfRank}</strong>.</p>
+
+<p>You might also enjoy this clip of me using the What-if Machine and suffering as a result: </p>
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/0soYZqA-m70" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
       </div>
     }
       </div>
