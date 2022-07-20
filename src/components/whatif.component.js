@@ -65,6 +65,15 @@ export default class WhatIf extends Component {
         currentWeek: currentWeek,
         })
       })
+      .then(
+        (result) =>{
+      fetch(url+"?csurl=https://understat.com/league/EPL/")
+      .then(res => res)
+     .then(
+      (result) => {
+        console.log(result);
+      }) 
+    })
   }
 
 

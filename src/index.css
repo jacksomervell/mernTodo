@@ -98,3 +98,7 @@ h2, p, a {
 html, body {
     height:100vh;
 }
+
+.toolsLogo {
+  width:15%;
+}

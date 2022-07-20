@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Team Analyser</title>
+        <script
+  src="https://code.jquery.com/jquery-3.6.0.min.js"
+  integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+  crossorigin="anonymous"></script>
+    </head>
+    <body>
+        <div>
+            <input id='teamId'></input>
+            <button id='showTeam'></button>
+            <p id='myTeam'></p>
+        </div>
+    
+        <script>
+
+            $('#showTeam').click(function(){
+                let teamId = $('#teamId').val();
+                
+                $.get('/http://fantasy.premierleague.com/api/entry/' + teamId,
+                    function (data, textStatus, jqXHR) {  // success callback
+                        alert('status: ' + textStatus + ', data:' + data);
+                    });
+
+                $('#myTeam').html(teamId);
+
+            })
+                // https://fantasy.premierleague.com/api/bootstrap-static/
+        </script>
+    </body>
+</html>
