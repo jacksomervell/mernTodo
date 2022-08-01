@@ -20,6 +20,7 @@ class App extends Component {
       <Router>
         <Container>
           <Navbar expand="sm" variant="dark" className="fplNav">
+            
             <Link to="/" className="navbar-brand"><img className="toolsLogo"
             src="/FPLTools.png"
             alt="example"

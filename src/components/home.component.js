@@ -36,6 +36,11 @@ export default class ToolsList extends Component {
         description: 'See who has used which chips in your mini-league, and how you compare.',
         url: '/chip-checker'
         },
+        {
+          title: 'MINI-LEAGUE WHAT-IF MACHINE',
+          description: 'How would your mini-league look if no one had made a change since Gameweek 1?',
+          url: '/chip-/what-if-league'
+          },
         ]
 
     this.setState({tools : setTools})
