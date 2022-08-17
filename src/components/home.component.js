@@ -40,7 +40,12 @@ export default class ToolsList extends Component {
           title: 'MINI-LEAGUE WHAT-IF MACHINE',
           description: 'How would your mini-league look if no one had made a change since Gameweek 1?',
           url: '/chip-/what-if-league'
-          },
+        },
+        {
+            title: 'CAREER HISTORY ANALYSER',
+            description: 'Get an in-depth look at your entire FPL career history.',
+            url: '/season-history-analyser'
+        },
         ]
 
     this.setState({tools : setTools})
